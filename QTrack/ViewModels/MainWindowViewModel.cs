@@ -7,6 +7,7 @@ namespace QTrack.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string title = "QTrack";
+        private ITabViewModels? selectedTab;
 
         public MainWindowViewModel()
         {
@@ -26,10 +27,13 @@ namespace QTrack.ViewModels
 
             TabViewModels.Add(projectsVm);
             TabViewModels.Add(issuesVm);
+            SelectedTab = projectsVm;
         }
 
         public string Title { get => title; set => SetProperty(ref title, value); }
 
         public ObservableCollection<ITabViewModels> TabViewModels { get; set; } = new ();
+
+        public ITabViewModels? SelectedTab { get => selectedTab; set => SetProperty(ref selectedTab, value); }
     }
 }
