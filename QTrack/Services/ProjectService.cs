@@ -4,7 +4,7 @@ namespace QTrack.Services
 {
     public class ProjectService : IProjectService
     {
-        public IEnumerable<Project> GetAllProjects()
+        public Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
             throw new NotImplementedException();
         }

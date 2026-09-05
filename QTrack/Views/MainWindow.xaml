@@ -6,12 +6,25 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
+    xmlns:views="clr-namespace:QTrack.Views"
     Title="{Binding Title}"
     Width="1024"
     Height="480"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     TitleCharacterCasing="Normal"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:ProjectsViewModel}">
+            <views:ProjectsView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:IssuesViewModel}">
+            <views:IssuesView />
+        </DataTemplate>
+    </Window.Resources>
+
+
     <TabControl
         Background="{StaticResource DarkBackgroundBrush}"
         BorderThickness="0"

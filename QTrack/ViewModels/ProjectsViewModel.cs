@@ -1,4 +1,7 @@
-﻿using QTrack.Services;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
+using QTrack.Models;
+using QTrack.Services;
 using QTrack.Utils;
 
 namespace QTrack.ViewModels
@@ -7,6 +10,7 @@ namespace QTrack.ViewModels
     public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
+        private AsyncRelayCommand fetchProjectsCommand;
 
         public ProjectsViewModel(IProjectService projectService)
         {
@@ -17,5 +21,23 @@ namespace QTrack.ViewModels
         }
 
         public string Header { get; set; } = "Projects";
+
+        public ObservableCollection<Project> Projects { get; set; } = new ();
+
+        public AsyncRelayCommand FetchProjectsAsyncCommand =>
+            fetchProjectsCommand = new AsyncRelayCommand(async () =>
+            {
+                try
+                {
+                    var l = await projectService.GetAllProjectsAsync();
+                    Projects.Clear();
+                    Projects.AddRange(l);
+                }
+                catch (Exception e)
+                {
+                    AppLogger.Error("プロジェクトの読み込みに失敗しました", e);
+                    throw;
+                }
+            });
     }
 }

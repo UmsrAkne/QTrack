@@ -8,6 +8,6 @@ namespace QTrack.Services
         /// 取得可能な全てのプロジェクトを取得します。
         /// </summary>
         /// <returns>権限内で取得可能な全てのプロジェクト</returns>
-        IEnumerable<Project> GetAllProjects();
+        Task<IEnumerable<Project>> GetAllProjectsAsync();
     }
 }
