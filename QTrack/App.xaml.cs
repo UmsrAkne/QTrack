@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using QTrack.Services;
 using QTrack.Views;
 
 namespace QTrack;
@@ -10,6 +11,13 @@ public partial class App
 {
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        #if RELEASE
+        containerRegistry.Register<IProjectService, ProjectService>();
+        containerRegistry.Register<IIssueService, IssueService>();
+        #elif DEBUG
+        containerRegistry.Register<IProjectService, MockProjectService>();
+        containerRegistry.Register<IIssueService, MockIssueService>();
+        #endif
     }
 
     protected override Window CreateShell()
