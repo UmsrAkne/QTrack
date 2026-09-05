@@ -26,7 +26,12 @@
             <SolidColorBrush x:Key="DarkBackgroundBrush" Color="#191922" />
             <SolidColorBrush x:Key="MediumBackgroundBrush" Color="#222233" />
             <SolidColorBrush x:Key="LightBackgroundBrush" Color="#303044" />
-            <system:Double x:Key="CommonFontSize">18.0</system:Double>
+            <SolidColorBrush x:Key="LightBorderBrush" Color="#9999EE" />
+            <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#222233" />
+            <Color x:Key="LightBackgroundColor">#444466</Color>
+            <Color x:Key="MouseOverBackgroundColor">#555588</Color>
+
+            <system:Double x:Key="CommonFontSize">16.0</system:Double>
             <CornerRadius
                 x:Key="CommonRadius"
                 BottomLeft="8"
