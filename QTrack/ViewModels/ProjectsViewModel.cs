@@ -10,7 +10,17 @@ namespace QTrack.ViewModels
     public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
-        private AsyncRelayCommand fetchProjectsCommand;
+        private AsyncRelayCommand? fetchProjectsCommand;
+
+        public ProjectsViewModel()
+        {
+            // xaml プレビューを表示するためのコンストラクタ
+            AppLogger.Warn("ProjectsViewModel() が実行されました。");
+            AppLogger.Warn("通常、このコンストラクタは実行されません。オーバーロードの実行に問題がないか確認してください。");
+            projectService = new MockProjectService();
+            var list = projectService.GetAllProjectsAsync();
+            Projects.AddRange(list.Result);
+        }
 
         public ProjectsViewModel(IProjectService projectService)
         {
@@ -25,7 +35,7 @@ namespace QTrack.ViewModels
         public ObservableCollection<Project> Projects { get; set; } = new ();
 
         public AsyncRelayCommand FetchProjectsAsyncCommand =>
-            fetchProjectsCommand = new AsyncRelayCommand(async () =>
+            fetchProjectsCommand ??= new AsyncRelayCommand(async () =>
             {
                 try
                 {
