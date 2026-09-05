@@ -49,9 +49,7 @@
 
         <ListBox.ItemContainerStyle>
             <Style TargetType="ListBoxItem">
-                <Setter Property="BorderBrush" Value="{StaticResource LightBorderBrush}" />
-                <Setter Property="BorderThickness" Value="0.5" />
-                <Setter Property="Margin" Value="2" />
+                <Setter Property="Margin" Value="1" />
                 <Setter Property="Padding" Value="4" />
 
                 <Setter Property="Template">
@@ -66,7 +64,7 @@
                                 SnapsToDevicePixels="True">
 
                                 <Border.Background>
-                                    <SolidColorBrush Color="{StaticResource LightBackgroundColor}" />
+                                    <SolidColorBrush Color="{StaticResource MediumBackgroundColor}" />
                                 </Border.Background>
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -91,7 +89,7 @@
                                                     Storyboard.TargetName="Bd"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                     To="{StaticResource MouseOverBackgroundColor}"
-                                                    Duration="0:0:0.1" />
+                                                    Duration="0:0:0.3" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.EnterActions>
@@ -102,8 +100,8 @@
                                                 <ColorAnimation
                                                     Storyboard.TargetName="Bd"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource LightBackgroundColor}"
-                                                    Duration="0:0:0.1" />
+                                                    To="{StaticResource MediumBackgroundColor}"
+                                                    Duration="0:0:0.3" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </Trigger.ExitActions>
@@ -117,12 +115,7 @@
                                                 <ColorAnimation
                                                     Storyboard.TargetName="Bd"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="#334A90E2"
-                                                    Duration="0:0:0.1" />
-                                                <ColorAnimation
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                    To="LightBlue"
+                                                    To="{StaticResource SelectionBackgroundColor}"
                                                     Duration="0:0:0.1" />
                                             </Storyboard>
                                         </BeginStoryboard>
@@ -135,12 +128,6 @@
                                                     FillBehavior="Stop"
                                                     Storyboard.TargetName="Bd"
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource LightBackgroundColor}"
-                                                    Duration="0:0:0.1" />
-                                                <ColorAnimation
-                                                    FillBehavior="Stop"
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
                                                     To="{StaticResource LightBackgroundColor}"
                                                     Duration="0:0:0.1" />
                                             </Storyboard>
