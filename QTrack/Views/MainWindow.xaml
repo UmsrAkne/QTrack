@@ -12,5 +12,18 @@
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     TitleCharacterCasing="Normal"
     mc:Ignorable="d">
-    <Grid Background="{StaticResource DarkBackgroundBrush}" />
+    <TabControl
+        Background="{StaticResource DarkBackgroundBrush}"
+        BorderThickness="0"
+        ItemsSource="{Binding TabViewModels}"
+        Style="{x:Null}">
+
+        <TabControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ITabViewModels}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Header}" />
+                </StackPanel>
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+    </TabControl>
 </mah:MetroWindow>

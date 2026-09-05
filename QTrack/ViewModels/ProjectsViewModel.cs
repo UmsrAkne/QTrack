@@ -4,7 +4,7 @@ using QTrack.Utils;
 namespace QTrack.ViewModels
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class ProjectsViewModel : BindableBase
+    public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
 
@@ -15,5 +15,7 @@ namespace QTrack.ViewModels
 
             this.projectService = projectService;
         }
+
+        public string Header { get; set; } = "Projects";
     }
 }

@@ -1,4 +1,5 @@
-﻿using QTrack.Utils;
+﻿using System.Collections.ObjectModel;
+using QTrack.Utils;
 
 namespace QTrack.ViewModels
 {
@@ -22,8 +23,13 @@ namespace QTrack.ViewModels
 
             AppLogger.Info(projectsVm.ToString() ?? string.Empty);
             AppLogger.Info(issuesVm.ToString() ?? string.Empty);
+
+            TabViewModels.Add(projectsVm);
+            TabViewModels.Add(issuesVm);
         }
 
         public string Title { get => title; set => SetProperty(ref title, value); }
+
+        public ObservableCollection<ITabViewModels> TabViewModels { get; set; } = new ();
     }
 }

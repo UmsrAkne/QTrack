@@ -21,7 +21,7 @@ public partial class App
         #endif
 
         containerRegistry.RegisterSingleton<ProjectsViewModel>();
-        containerRegistry.RegisterSingleton<IssuesViewModel>();
+        containerRegistry.Register<IssuesViewModel>();
     }
 
     protected override Window CreateShell()
