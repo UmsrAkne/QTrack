@@ -17,7 +17,7 @@
             <b:InvokeCommandAction Command="{Binding FetchProjectsAsyncCommand}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
-    <ListBox ItemsSource="{Binding Projects}">
+    <ListBox ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}" ItemsSource="{Binding Projects}">
         <ListBox.ItemTemplate>
             <DataTemplate DataType="{x:Type models:Project}">
                 <Border>
@@ -46,116 +46,5 @@
                 </Border>
             </DataTemplate>
         </ListBox.ItemTemplate>
-
-        <ListBox.ItemContainerStyle>
-            <Style TargetType="ListBoxItem">
-                <Setter Property="Margin" Value="1" />
-                <Setter Property="Padding" Value="4" />
-
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListBoxItem">
-                            <Border
-                                x:Name="Bd"
-                                Padding="{TemplateBinding Padding}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{StaticResource CommonRadius}"
-                                SnapsToDevicePixels="True">
-
-                                <Border.Background>
-                                    <SolidColorBrush Color="{StaticResource MediumBackgroundColor}" />
-                                </Border.Background>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}" />
-                                    </Style>
-                                </Border.Style>
-
-                                <ContentPresenter
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                    SnapsToDevicePixels="True" />
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-
-                                <!-- マウスオーバー -->
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource MouseOverBackgroundColor}"
-                                                    Duration="0:0:0.3" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource MediumBackgroundColor}"
-                                                    Duration="0:0:0.3" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-
-                                <!-- 選択中 -->
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource SelectionBackgroundColor}"
-                                                    Duration="0:0:0.1" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                                    FillBehavior="Stop"
-                                                    Storyboard.TargetName="Bd"
-                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                    To="{StaticResource LightBackgroundColor}"
-                                                    Duration="0:0:0.1" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-
-                                <!-- 非アクティブ選択 -->
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsSelected" Value="True" />
-                                        <Condition Property="Selector.IsSelectionActive" Value="False" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter TargetName="Bd" Property="Opacity" Value="0.8" />
-                                </MultiTrigger>
-
-                                <!-- 無効 -->
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Opacity" Value="0.5" />
-                                </Trigger>
-
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-
-            </Style>
-        </ListBox.ItemContainerStyle>
-
     </ListBox>
 </UserControl>
