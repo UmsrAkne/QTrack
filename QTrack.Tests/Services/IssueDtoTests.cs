@@ -160,5 +160,21 @@ namespace QTrack.Tests.Services
             var priorityField = issue.CustomFields?.FirstOrDefault(f => f.Name == "Priority");
             Assert.That(priorityField?.Value?.Name, Is.EqualTo("Normal"));
         }
+
+        [Test]
+        public void ToModel()
+        {
+            var issues = JsonSerializer.Deserialize<List<IssueDto>>(SampleJson)
+                .Select(dto => dto.ToModel())
+                .ToList();
+
+            Assert.That(issues, Is.Not.Null);
+            Assert.That(issues.Count, Is.EqualTo(1));
+
+            var issue = issues[0];
+            Assert.That(issue.IdReadable, Is.EqualTo("DEB-1"));
+            Assert.That(issue.Summary, Is.EqualTo("デバッグ用プロジェクトの課題_1"));
+            Assert.That(issue.Priority, Is.EqualTo("Normal"));
+        }
     }
 }
