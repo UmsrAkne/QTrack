@@ -17,33 +17,44 @@
             <b:InvokeCommandAction Command="{Binding FetchProjectsAsyncCommand}" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
-    <ListBox ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}" ItemsSource="{Binding Projects}">
+    <ListBox
+        ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+        ItemsSource="{Binding Projects}"
+        SelectedItem="{Binding SelectedProject}">
         <ListBox.ItemTemplate>
             <DataTemplate DataType="{x:Type models:Project}">
-                <Border>
-                    <StackPanel Margin="0,2" Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Width="20"
-                            Height="20"
-                            Margin="10,0"
-                            VerticalAlignment="Center"
-                            Kind="Star">
-                            <materialDesign:PackIcon.Style>
-                                <Style TargetType="materialDesign:PackIcon">
-                                    <Setter Property="Opacity" Value="0.3" />
-                                    <Setter Property="Foreground" Value="DarkGray" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsFavorite}" Value="True">
-                                            <Setter Property="Opacity" Value="1" />
-                                            <Setter Property="Foreground" Value="Orange" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </materialDesign:PackIcon.Style>
-                        </materialDesign:PackIcon>
-                        <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Name}" />
-                    </StackPanel>
-                </Border>
+                <ContentControl>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.RaiseOpenProjectEventCommand}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+
+                    <Border>
+                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="20"
+                                Height="20"
+                                Margin="10,0"
+                                VerticalAlignment="Center"
+                                Kind="Star">
+                                <materialDesign:PackIcon.Style>
+                                    <Style TargetType="materialDesign:PackIcon">
+                                        <Setter Property="Opacity" Value="0.3" />
+                                        <Setter Property="Foreground" Value="DarkGray" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                                                <Setter Property="Opacity" Value="1" />
+                                                <Setter Property="Foreground" Value="Orange" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </materialDesign:PackIcon.Style>
+                            </materialDesign:PackIcon>
+                            <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Name}" />
+                        </StackPanel>
+                    </Border>
+                </ContentControl>
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>

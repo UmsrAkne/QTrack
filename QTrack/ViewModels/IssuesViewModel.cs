@@ -1,4 +1,5 @@
-﻿using QTrack.Services;
+﻿using QTrack.Models;
+using QTrack.Services;
 using QTrack.Utils;
 
 namespace QTrack.ViewModels
@@ -19,5 +20,14 @@ namespace QTrack.ViewModels
         }
 
         public string Header { get; set; } = "Issues";
+
+        public Project? CurrentProject { get; set; }
+
+        public async Task InitializeAsync(Project project)
+        {
+            await Task.Delay(2000);
+            CurrentProject = project;
+            Header = $"{project.Name} の課題";
+        }
     }
 }
