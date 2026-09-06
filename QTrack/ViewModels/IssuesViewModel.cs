@@ -13,7 +13,7 @@ namespace QTrack.ViewModels
         public IssuesViewModel(IIssueService issueService, ApiCredentials credentials)
         {
             AppLogger.Info("IssuesViewModel created");
-            AppLogger.Info(issueService.ToString());
+            AppLogger.Info(issueService.ToString() ?? string.Empty);
 
             this.credentials = credentials;
             this.issueService = issueService;

@@ -11,9 +11,7 @@ namespace QTrack.ViewModels
     {
         private readonly IProjectService projectService;
         private AsyncRelayCommand? fetchProjectsCommand;
-        private Project selectedProject;
-
-        public event EventHandler<Project>? OpenProjectEvent;
+        private Project? selectedProject;
 
         public ProjectsViewModel()
         {
@@ -28,15 +26,17 @@ namespace QTrack.ViewModels
         public ProjectsViewModel(IProjectService projectService)
         {
             AppLogger.Info("IssuesViewModel created");
-            AppLogger.Info(projectService.ToString());
+            AppLogger.Info(projectService.ToString() ?? string.Empty);
             this.projectService = projectService;
         }
+
+        public event EventHandler<Project>? OpenProjectEvent;
 
         public string Header { get; set; } = "Projects";
 
         public ObservableCollection<Project> Projects { get; set; } = new ();
 
-        public Project SelectedProject
+        public Project? SelectedProject
         {
             get => selectedProject;
             set => SetProperty(ref selectedProject, value);
@@ -60,7 +60,10 @@ namespace QTrack.ViewModels
 
         public DelegateCommand RaiseOpenProjectEventCommand => new (() =>
         {
-            OpenProjectEvent?.Invoke(this, SelectedProject);
+            if (SelectedProject is not null)
+            {
+                OpenProjectEvent?.Invoke(this, SelectedProject);
+            }
         });
     }
 }

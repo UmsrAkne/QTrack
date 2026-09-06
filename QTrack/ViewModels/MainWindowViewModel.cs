@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using QTrack.Models;
+using QTrack.Services;
 using QTrack.Utils;
 
 namespace QTrack.ViewModels
@@ -7,13 +8,14 @@ namespace QTrack.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
+        private readonly Func<IssuesViewModel> issuesVmFactory;
         private string title = "QTrack";
         private ITabViewModels? selectedTab;
-        private readonly Func<IssuesViewModel> issuesVmFactory;
 
         public MainWindowViewModel()
         {
             AppLogger.Info("MainWindowViewModel created");
+            issuesVmFactory = () => new IssuesViewModel(new MockIssueService(), new ApiCredentials());
         }
 
         public MainWindowViewModel(ProjectsViewModel projectsVm, Func<IssuesViewModel> issuesVmFactory)

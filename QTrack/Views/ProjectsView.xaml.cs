@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace QTrack.Views
+﻿namespace QTrack.Views
 {
-    public partial class ProjectsView : UserControl
+    public partial class ProjectsView
     {
         public ProjectsView()
         {
