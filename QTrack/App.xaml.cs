@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using DotNetEnv;
 using QTrack.Services;
+using QTrack.Utils;
 using QTrack.ViewModels;
 using QTrack.Views;
 
@@ -12,6 +14,15 @@ public partial class App
 {
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
+        var credentials = new ApiCredentials
+        {
+            YoutrackApiKey = Env.GetString("YOUTRACK_API_KEY"),
+            YoutrackProjectsEndpoint = Env.GetString("YOUTRACK_PROJECTS_ENDPOINT"),
+            YoutrackIssuesEndpoint = Env.GetString("YOUTRACK_ISSUES_ENDPOINT"),
+        };
+
+        containerRegistry.RegisterInstance(credentials);
+
         #if RELEASE
         containerRegistry.Register<IProjectService, ProjectService>();
         containerRegistry.Register<IIssueService, IssueService>();
@@ -27,5 +38,11 @@ public partial class App
     protected override Window CreateShell()
     {
         return Container.Resolve<MainWindow>();
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        Env.Load();
+        base.OnStartup(e);
     }
 }

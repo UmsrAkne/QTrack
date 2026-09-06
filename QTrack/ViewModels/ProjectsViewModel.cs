@@ -10,6 +10,7 @@ namespace QTrack.ViewModels
     public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
+        private readonly ApiCredentials credentials;
         private AsyncRelayCommand? fetchProjectsCommand;
 
         public ProjectsViewModel()
@@ -22,11 +23,11 @@ namespace QTrack.ViewModels
             Projects.AddRange(list.Result);
         }
 
-        public ProjectsViewModel(IProjectService projectService)
+        public ProjectsViewModel(IProjectService projectService, ApiCredentials credentials)
         {
             AppLogger.Info("IssuesViewModel created");
             AppLogger.Info(projectService.ToString());
-
+            this.credentials = credentials;
             this.projectService = projectService;
         }
 
