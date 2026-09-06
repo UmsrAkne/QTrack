@@ -59,11 +59,6 @@
                                 <Border.Background>
                                     <SolidColorBrush Color="{StaticResource MediumBackgroundColor}" />
                                 </Border.Background>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}" />
-                                    </Style>
-                                </Border.Style>
 
                                 <ContentPresenter
                                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
