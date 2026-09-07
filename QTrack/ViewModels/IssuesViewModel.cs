@@ -9,14 +9,12 @@ namespace QTrack.ViewModels
     public class IssuesViewModel : BindableBase, ITabViewModels
     {
         private readonly IIssueService issueService;
-        private readonly ApiCredentials credentials;
 
-        public IssuesViewModel(IIssueService issueService, ApiCredentials credentials)
+        public IssuesViewModel(IIssueService issueService)
         {
             AppLogger.Info("IssuesViewModel created");
             AppLogger.Info(issueService.ToString() ?? string.Empty);
 
-            this.credentials = credentials;
             this.issueService = issueService;
         }
 
@@ -31,7 +29,7 @@ namespace QTrack.ViewModels
             await Task.Delay(2000);
             CurrentProject = project;
 
-            var issues = issueService.GetIssues(project, 10);
+            var issues = await issueService.GetIssuesAsync(project, 10);
             Issues.AddRange(issues);
 
             Header = $"{project.Name} の課題";

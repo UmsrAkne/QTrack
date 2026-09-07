@@ -4,7 +4,7 @@ namespace QTrack.Services
 {
     public class MockIssueService : IIssueService
     {
-        public List<Issue> GetIssues(Project project, int count)
+        public async Task<List<Issue>> GetIssuesAsync(Project project, int count)
         {
             var l = new List<Issue>();
             for (var i = 0; i < 10; i++)
@@ -23,7 +23,7 @@ namespace QTrack.Services
                 l.Add(issue);
             }
 
-            return l;
+            return await Task.FromResult(l);
         }
     }
 }
