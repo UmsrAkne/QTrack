@@ -22,7 +22,7 @@ namespace QTrack.Services
 
         public async Task<List<Issue>> GetIssuesAsync(Project project, int count)
         {
-            var query = $"{project.ShortName}&fields=id,idReadable,summary,description,updated,customFields(name,value(name,minutes,presentation)),links(direction,linkType(name),issues(idReadable))";
+            var query = $"query=project:{project.ShortName}&fields=id,idReadable,summary,description,updated,customFields(name,value(name,minutes,presentation)),links(direction,linkType(name),issues(idReadable))";
             var url = $"{credentials.YoutrackIssuesEndpoint}?{query}";
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
