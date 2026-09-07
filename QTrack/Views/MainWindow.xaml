@@ -29,6 +29,7 @@
         Background="{StaticResource DarkBackgroundBrush}"
         BorderThickness="0"
         ItemsSource="{Binding TabViewModels}"
+        SelectedItem="{Binding SelectedTab}"
         Style="{x:Null}">
 
         <TabControl.ItemTemplate>
