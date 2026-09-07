@@ -70,6 +70,7 @@ namespace QTrack.Tests.Services
                     "$type": "SimpleIssueCustomField"
                 }
             ],
+            "updated": 1788688535945,
             "summary": "デバッグ用プロジェクトの課題_1",
             "links": [
                 {
@@ -156,6 +157,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.Id, Is.EqualTo("2-7382"));
             Assert.That(issue.IdReadable, Is.EqualTo("DEB-1"));
             Assert.That(issue.Summary, Is.EqualTo("デバッグ用プロジェクトの課題_1"));
+            Assert.That(issue.Updated, Is.EqualTo(1788688535945));
 
             var priorityField = issue.CustomFields?.FirstOrDefault(f => f.Name == "Priority");
             Assert.That(priorityField?.Value?.Name, Is.EqualTo("Normal"));
@@ -175,6 +177,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.IdReadable, Is.EqualTo("DEB-1"));
             Assert.That(issue.Summary, Is.EqualTo("デバッグ用プロジェクトの課題_1"));
             Assert.That(issue.Priority, Is.EqualTo("Normal"));
+            Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
         }
     }
 }

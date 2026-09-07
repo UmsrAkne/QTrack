@@ -23,6 +23,9 @@ namespace QTrack.Services.DTOs
         [JsonPropertyName("$type")]
         public string? Type { get; set; }
 
+        [JsonPropertyName("updated")]
+        public long Updated { get; set; }
+
         [JsonPropertyName("customFields")]
         public List<CustomFieldDto>? CustomFields { get; set; }
 
@@ -37,6 +40,7 @@ namespace QTrack.Services.DTOs
                 Type = GetCustomFieldValue("Type"),
                 State = GetCustomFieldValue("State"),
                 Assignee = GetCustomFieldValue("Assignee"),
+                UpdatedAt = DateTimeOffset.FromUnixTimeMilliseconds(Updated).DateTime,
             };
         }
     }
