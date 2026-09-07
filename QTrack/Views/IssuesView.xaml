@@ -4,10 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:QTrack.Models"
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     d:DataContext="{d:DesignInstance viewModels:IssuesViewModel}"
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
-    <Grid />
+    <Grid>
+        <ListBox ItemsSource="{Binding Issues}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:Issue}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="WhiteSmoke" Text="{Binding Summary}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </UserControl>
