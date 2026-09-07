@@ -17,5 +17,7 @@
         public string? State { get; init; }
 
         public string? Assignee { get; init; }
+
+        public DateTime UpdatedAt { get; init; }
     }
 }

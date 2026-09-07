@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace QTrack.Services.DTOs
 {
@@ -15,6 +16,6 @@ namespace QTrack.Services.DTOs
         /// ここでは汎用的な CustomFieldValueDto または JsonElement で受けるのがおすすめです。
         /// </summary>
         [JsonPropertyName("value")]
-        public CustomFieldValueDto? Value { get; set; }
+        public JsonElement? Value { get; set; }
     }
 }

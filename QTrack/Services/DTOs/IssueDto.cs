@@ -1,13 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using QTrack.Models;
 
 namespace QTrack.Services.DTOs
 {
     public class IssueDto
     {
-        private string? GetCustomFieldValue(string fieldName) =>
-            CustomFields?.FirstOrDefault(f => f.Name == fieldName)?.Value?.Name;
-
         [JsonPropertyName("id")]
         public string? Id { get; set; }
 
@@ -23,6 +21,9 @@ namespace QTrack.Services.DTOs
         [JsonPropertyName("$type")]
         public string? Type { get; set; }
 
+        [JsonPropertyName("updated")]
+        public long Updated { get; set; }
+
         [JsonPropertyName("customFields")]
         public List<CustomFieldDto>? CustomFields { get; set; }
 
@@ -37,6 +38,33 @@ namespace QTrack.Services.DTOs
                 Type = GetCustomFieldValue("Type"),
                 State = GetCustomFieldValue("State"),
                 Assignee = GetCustomFieldValue("Assignee"),
+                UpdatedAt = DateTimeOffset.FromUnixTimeMilliseconds(Updated).DateTime,
+            };
+        }
+
+        private string? GetCustomFieldValue(string fieldName)
+        {
+            var field = CustomFields?.FirstOrDefault(f => f.Name == fieldName);
+            if (field?.Value == null)
+            {
+                return null;
+            }
+
+            var val = field.Value.Value;
+
+            return val.ValueKind switch
+            {
+                // オブジェクトの場合 ({ "name": "Show-stopper", ... }) -> nameプロパティを取得
+                JsonValueKind.Object => val.TryGetProperty("name", out var nameProp) ? nameProp.GetString() : null,
+
+                // 文字列の場合 ("直接の文字列")
+                JsonValueKind.String => val.GetString(),
+
+                // 数値の場合 (100 など)
+                JsonValueKind.Number => val.GetRawText(),
+
+                // null や その他
+                _ => null,
             };
         }
     }
