@@ -160,7 +160,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.Updated, Is.EqualTo(1788688535945));
 
             var priorityField = issue.CustomFields?.FirstOrDefault(f => f.Name == "Priority");
-            Assert.That(priorityField?.Value?.Name, Is.EqualTo("Normal"));
+            Assert.That(priorityField?.Value?.GetProperty("name").GetString(), Is.EqualTo("Normal"));
         }
 
         [Test]
