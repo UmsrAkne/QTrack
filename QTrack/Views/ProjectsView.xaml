@@ -31,28 +31,47 @@
                     </b:Interaction.Triggers>
 
                     <Border>
-                        <StackPanel Margin="0,2" Orientation="Horizontal">
+                        <DockPanel Margin="0,2">
+                            <!-- 左側：お気に入りアイコン -->
                             <materialDesign:PackIcon
-                                Width="20"
-                                Height="20"
+                                Width="18"
+                                Height="18"
                                 Margin="10,0"
                                 VerticalAlignment="Center"
-                                Kind="Star">
-                                <materialDesign:PackIcon.Style>
-                                    <Style TargetType="materialDesign:PackIcon">
-                                        <Setter Property="Opacity" Value="0.3" />
-                                        <Setter Property="Foreground" Value="DarkGray" />
+                                DockPanel.Dock="Left"
+                                Kind="Star"
+                                Opacity="0.2" />
+
+                            <!-- 右端：選択中かつロード中ならスピナーを表示 -->
+                            <ProgressBar
+                                Width="20"
+                                Height="20"
+                                Margin="0,0,10,0"
+                                DockPanel.Dock="Right"
+                                IsIndeterminate="True">
+                                <ProgressBar.Style>
+                                    <Style BasedOn="{StaticResource MaterialDesignCircularProgressBar}" TargetType="ProgressBar">
+                                        <Setter Property="Visibility" Value="Collapsed" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsFavorite}" Value="True">
-                                                <Setter Property="Opacity" Value="1" />
-                                                <Setter Property="Foreground" Value="Orange" />
-                                            </DataTrigger>
+                                            <!-- ViewModelのIsLoadingがTrue かつ この行がSelectedProjectのときのみ表示 -->
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.IsLoading}" Value="True" />
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBoxItem}, Path=IsSelected}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </MultiDataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </materialDesign:PackIcon.Style>
-                            </materialDesign:PackIcon>
-                            <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Name}" />
-                        </StackPanel>
+                                </ProgressBar.Style>
+                            </ProgressBar>
+
+                            <!-- 中央：プロジェクト名 -->
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="{StaticResource CommonFontSize}"
+                                Text="{Binding Name}" />
+                        </DockPanel>
                     </Border>
                 </ContentControl>
             </DataTemplate>
