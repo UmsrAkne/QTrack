@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
 using QTrack.Models;
 using QTrack.Services;
 using QTrack.Utils;
@@ -9,6 +10,9 @@ namespace QTrack.ViewModels
     public class IssuesViewModel : BindableBase, ITabViewModels
     {
         private readonly IIssueService issueService;
+        private Issue pendingIssue = new ();
+        private AsyncRelayCommand? quickAddCommand;
+        private AsyncRelayCommand? addIssueCommand;
 
         public IssuesViewModel()
         {
@@ -33,6 +37,20 @@ namespace QTrack.ViewModels
         public Project? CurrentProject { get; set; }
 
         public ObservableCollection<Issue> Issues { get; set; } = new ();
+
+        public Issue PendingIssue { get => pendingIssue; set => SetProperty(ref pendingIssue, value); }
+
+        public AsyncRelayCommand QuickAddAsyncCommand =>
+            quickAddCommand ??= new AsyncRelayCommand(async () =>
+            {
+                await Task.CompletedTask;
+            });
+
+        public AsyncRelayCommand AddIssueAsyncCommand =>
+            addIssueCommand ??= new AsyncRelayCommand(async () =>
+            {
+                await Task.CompletedTask;
+            });
 
         public async Task InitializeAsync(Project project)
         {
