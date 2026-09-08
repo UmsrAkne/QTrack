@@ -8,14 +8,26 @@
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     d:DataContext="{d:DesignInstance viewModels:IssuesViewModel}"
     d:DesignHeight="300"
-    d:DesignWidth="300"
+    d:DesignWidth="600"
     mc:Ignorable="d">
     <Grid>
-        <ListBox ItemsSource="{Binding Issues}">
+        <ListBox ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}" ItemsSource="{Binding Issues}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:Issue}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Foreground="WhiteSmoke" Text="{Binding Summary}" />
+                    <StackPanel Margin="5,1" Orientation="Horizontal">
+                        <CheckBox />
+
+                        <Border Width="0" Margin="4,0" />
+
+                        <Button Width="80" Content="Status" />
+
+                        <Border Width="0" Margin="8,0" />
+
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            Foreground="WhiteSmoke"
+                            Text="{Binding Summary}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

@@ -10,6 +10,16 @@ namespace QTrack.ViewModels
     {
         private readonly IIssueService issueService;
 
+        public IssuesViewModel()
+        {
+            // xaml プレビューを表示するためのコンストラクタ
+            AppLogger.Warn("IssuesViewModel() が実行されました。");
+            AppLogger.Warn("通常、このコンストラクタは実行されません。オーバーロードの実行に問題がないか確認してください。");
+            issueService = new MockIssueService();
+            var l = issueService.GetIssuesAsync(new Project(), 10);
+            Issues.AddRange(l.Result);
+        }
+
         public IssuesViewModel(IIssueService issueService)
         {
             AppLogger.Info("IssuesViewModel created");
