@@ -20,7 +20,8 @@ namespace QTrack.Services
 
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
-            const string query = "fields=id,name,shortName,archived";
+            // 明示的に取得数を指定しなければ、中途半端な数で打ち切られる
+            const string query = "fields=id,name,shortName,archived&$top=100";
             var url = $"{credentials.YoutrackProjectsEndpoint}?{query}";
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
