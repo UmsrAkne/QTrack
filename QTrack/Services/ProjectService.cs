@@ -39,6 +39,7 @@ namespace QTrack.Services
 
             return rawProjects.Select(dto => new Project
             {
+                Id = dto.Id ?? string.Empty,
                 Name = dto.Name ?? string.Empty,
                 ShortName = dto.ShortName ?? string.Empty,
                 IsArchive = dto.Archived,

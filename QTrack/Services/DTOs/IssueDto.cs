@@ -24,12 +24,18 @@ namespace QTrack.Services.DTOs
         [JsonPropertyName("updated")]
         public long Updated { get; set; }
 
+        [JsonPropertyName("EntryNo")]
+        public int EntryNo { get; set; }
+
+        [JsonPropertyName("Rate")]
+        public int Rate { get; set; }
+
         [JsonPropertyName("customFields")]
         public List<CustomFieldDto>? CustomFields { get; set; }
 
         public Issue ToModel()
         {
-            return new Issue
+            var issue = new Issue
             {
                 IdReadable = IdReadable ?? string.Empty,
                 Summary = Summary ?? string.Empty,
@@ -40,6 +46,20 @@ namespace QTrack.Services.DTOs
                 Assignee = GetCustomFieldValue("Assignee"),
                 UpdatedAt = DateTimeOffset.FromUnixTimeMilliseconds(Updated).DateTime,
             };
+
+            var rawEntryNo = GetCustomFieldValue("EntryNo");
+            if (int.TryParse(rawEntryNo, out var entryNoResult))
+            {
+                issue.EntryNo = entryNoResult;
+            }
+
+            var rawRate = GetCustomFieldValue("Rate");
+            if(int.TryParse(rawRate, out var rateResult))
+            {
+                issue.Rate = rateResult;
+            }
+
+            return issue;
         }
 
         private string? GetCustomFieldValue(string fieldName)

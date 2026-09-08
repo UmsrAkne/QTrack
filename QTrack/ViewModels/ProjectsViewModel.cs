@@ -12,6 +12,7 @@ namespace QTrack.ViewModels
         private readonly IProjectService projectService;
         private AsyncRelayCommand? fetchProjectsCommand;
         private Project? selectedProject;
+        private bool isLoading;
 
         public ProjectsViewModel()
         {
@@ -42,6 +43,8 @@ namespace QTrack.ViewModels
             set => SetProperty(ref selectedProject, value);
         }
 
+        public bool IsLoading { get => isLoading; set => SetProperty(ref isLoading, value); }
+
         public AsyncRelayCommand FetchProjectsAsyncCommand =>
             fetchProjectsCommand ??= new AsyncRelayCommand(async () =>
             {
@@ -63,6 +66,7 @@ namespace QTrack.ViewModels
             if (SelectedProject is not null)
             {
                 OpenProjectEvent?.Invoke(this, SelectedProject);
+                IsLoading = true;
             }
         });
     }

@@ -11,5 +11,8 @@
         public bool IsArchive { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        // 主に課題の新規投稿の際に使用する。
+        public string Id { get; set; } = string.Empty;
     }
 }
