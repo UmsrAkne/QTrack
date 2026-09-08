@@ -25,5 +25,24 @@ namespace QTrack.Services
 
             return await Task.FromResult(l);
         }
+
+        public async Task<Issue> CreateIssueAsync(Project project, string summary, string description)
+        {
+            // 投稿後に数秒待機
+            await Task.Delay(3000);
+
+            var issue = new Issue
+            {
+                Id = "dummy-id",
+                IdReadable = $"{project.ShortName}-DUMMY",
+                Summary = summary,
+                Description = description,
+                UpdatedAt = DateTime.Now,
+                Priority = "Normal",
+                State = "Open",
+            };
+
+            return issue;
+        }
     }
 }
