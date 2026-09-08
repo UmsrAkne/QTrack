@@ -19,5 +19,9 @@
         public string? Assignee { get; init; }
 
         public DateTime UpdatedAt { get; init; }
+
+        public int EntryNo { get; set; }
+
+        public int Rate { get; set; }
     }
 }

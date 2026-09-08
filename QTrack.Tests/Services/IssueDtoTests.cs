@@ -60,12 +60,12 @@ namespace QTrack.Tests.Services
                     "$type": "PeriodIssueCustomField"
                 },
                 {
-                    "value": null,
+                    "value": 999,
                     "name": "EntryNo",
                     "$type": "SimpleIssueCustomField"
                 },
                 {
-                    "value": null,
+                    "value": 100,
                     "name": "Rate",
                     "$type": "SimpleIssueCustomField"
                 }
@@ -159,6 +159,12 @@ namespace QTrack.Tests.Services
             Assert.That(issue.Summary, Is.EqualTo("デバッグ用プロジェクトの課題_1"));
             Assert.That(issue.Updated, Is.EqualTo(1788688535945));
 
+            var entryNoField = issue.CustomFields?.FirstOrDefault(f => f.Name == "EntryNo");
+            Assert.That(entryNoField?.Value?.GetInt32(), Is.EqualTo(999));
+
+            var rateField = issue.CustomFields?.FirstOrDefault(f => f.Name == "Rate");
+            Assert.That(rateField?.Value?.GetInt32(), Is.EqualTo(100));
+
             var priorityField = issue.CustomFields?.FirstOrDefault(f => f.Name == "Priority");
             Assert.That(priorityField?.Value?.GetProperty("name").GetString(), Is.EqualTo("Normal"));
         }
@@ -177,6 +183,8 @@ namespace QTrack.Tests.Services
             Assert.That(issue.IdReadable, Is.EqualTo("DEB-1"));
             Assert.That(issue.Summary, Is.EqualTo("デバッグ用プロジェクトの課題_1"));
             Assert.That(issue.Priority, Is.EqualTo("Normal"));
+            Assert.That(issue.EntryNo, Is.EqualTo(999));
+            Assert.That(issue.Rate, Is.EqualTo(100));
             Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
         }
     }
