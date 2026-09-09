@@ -7,7 +7,7 @@
         private string? type;
         private int entryNo;
         private int rate;
-        private string? state;
+        private IssueState? state;
 
         public string Id { get; init; } = "";
 
@@ -21,7 +21,7 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
-        public string? State { get => state; set => SetProperty(ref state, value); }
+        public IssueState? State { get => state; set => SetProperty(ref state, value); }
 
         public string? Assignee { get; init; }
 

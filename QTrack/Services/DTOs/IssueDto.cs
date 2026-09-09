@@ -42,7 +42,7 @@ namespace QTrack.Services.DTOs
                 Description = Description,
                 Priority = GetCustomFieldValue("Priority"),
                 Type = GetCustomFieldValue("Type"),
-                State = GetCustomFieldValue("State"),
+                State = IssueStateHelper.ToIssueState(GetCustomFieldValue("State")),
                 Assignee = GetCustomFieldValue("Assignee"),
                 UpdatedAt = DateTimeOffset.FromUnixTimeMilliseconds(Updated).DateTime,
             };
