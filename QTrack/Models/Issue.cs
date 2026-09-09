@@ -8,10 +8,13 @@
         private int entryNo;
         private int rate;
         private IssueState? state;
+        private bool isCompleted;
 
         public string Id { get; init; } = "";
 
         public string IdReadable { get; init; } = "";
+
+        public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value); }
 
         public string Summary { get => summary; set => SetProperty(ref summary, value); }
 
