@@ -18,7 +18,7 @@ namespace QTrack.ViewModels
             issuesVmFactory = () => new IssuesViewModel(new MockIssueService());
         }
 
-        public MainWindowViewModel(ProjectsViewModel projectsVm, Func<IssuesViewModel> issuesVmFactory)
+        public MainWindowViewModel(ProjectsViewModel projectsVm, Func<IssuesViewModel> issuesVmFactory, AppSettings appSettings)
         {
             AppLogger.Info("MainWindowViewModel created");
 
@@ -32,6 +32,10 @@ namespace QTrack.ViewModels
             SelectedTab = projectsVm;
 
             projectsVm.OpenProjectEvent += OnOpenProjectEvent;
+
+            #if DEBUG
+            _ = InitializeDebugStateAsync(appSettings);
+            #endif
         }
 
         public string Title { get => title; set => SetProperty(ref title, value); }
@@ -76,5 +80,26 @@ namespace QTrack.ViewModels
             TabViewModels.Add(newIssuesVm);
             SelectedTab = newIssuesVm;
         }
+
+        #if DEBUG
+        private async Task InitializeDebugStateAsync(AppSettings appSettings)
+        {
+            // コンストラクタ内では await できないため、インデックスの設定まで含めて非同期メソッドで実行
+            try
+            {
+                await OnOpenProjectIssuesAsync(new Project { Name = "Auto Generated Project 1", });
+
+                if (appSettings.InitialTabIndexForDebug >= 0 &&
+                    appSettings.InitialTabIndexForDebug < TabViewModels.Count)
+                {
+                    SelectedTab = TabViewModels[appSettings.InitialTabIndexForDebug];
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Warn($"Debug初期化に失敗しました: {ex.Message}");
+            }
+        }
+        #endif
     }
 }
