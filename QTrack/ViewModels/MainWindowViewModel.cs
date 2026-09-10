@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using QTrack.Models;
 using QTrack.Services;
 using QTrack.Utils;
@@ -53,7 +54,14 @@ namespace QTrack.ViewModels
             catch (Exception ex)
             {
                 // 必要に応じてログ出力やユーザーへのエラー通知
-                AppLogger.Warn($"プロジェクトのオープンに失敗しました: {ex.Message}");
+                var msg = $"プロジェクト \"{project.Name}\" のオープンに失敗しました: {ex.Message}";
+                AppLogger.Warn(msg);
+
+                MessageBox.Show(
+                    msg,
+                    "エラー",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
