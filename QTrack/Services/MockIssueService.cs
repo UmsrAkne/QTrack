@@ -16,7 +16,7 @@ namespace QTrack.Services
                     Summary = $"テスト用ダミー課題のタイトル {i + 1} ",
                     Description = $"テスト用課題の説明文\n改行つき {i + 1}",
                     Priority = "low",
-                    State = "open",
+                    State = IssueState.Created,
                     UpdatedAt = new DateTime(2024, 1, 1 + i),
                 };
 
@@ -39,7 +39,7 @@ namespace QTrack.Services
                 Description = description,
                 UpdatedAt = DateTime.Now,
                 Priority = "Normal",
-                State = "Open",
+                State = IssueState.Created,
             };
 
             return issue;

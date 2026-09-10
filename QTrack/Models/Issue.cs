@@ -7,11 +7,14 @@
         private string? type;
         private int entryNo;
         private int rate;
-        private string? state;
+        private IssueState? state;
+        private bool isCompleted;
 
         public string Id { get; init; } = "";
 
         public string IdReadable { get; init; } = "";
+
+        public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value); }
 
         public string Summary { get => summary; set => SetProperty(ref summary, value); }
 
@@ -21,7 +24,7 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
-        public string? State { get => state; set => SetProperty(ref state, value); }
+        public IssueState? State { get => state; set => SetProperty(ref state, value); }
 
         public string? Assignee { get; init; }
 
