@@ -1,0 +1,57 @@
+﻿<UserControl
+    x:Class="QTrack.Views.Controls.StateToggleButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:QTrack.Models"
+    x:Name="Root"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+
+    <Button Click="OnButtonClick">
+        <Button.Style>
+            <Style TargetType="Button">
+                <!-- 基本スタイル -->
+                <Setter Property="Padding" Value="10,2" />
+                <Setter Property="Cursor" Value="Hand" />
+
+                <!-- 状態（IssueState）ごとの見た目の切り替え -->
+                <Style.Triggers>
+                    <!-- 1. Created: 開始待ち -->
+                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Created}">
+                        <Setter Property="Content" Value="Start" />
+                        <Setter Property="Background" Value="#4CAF50" />
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+
+                    <!-- 2. InProgress: 作業中（押すと一時停止） -->
+                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.InProgress}">
+                        <Setter Property="Content" Value="Pause" />
+                        <Setter Property="Background" Value="#FF9800" />
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+
+                    <!-- 3. Pausing: 一時停止中（押すと再開） -->
+                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Pausing}">
+                        <Setter Property="Content" Value="Restart" />
+                        <Setter Property="Background" Value="#2196F3" />
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+
+                    <!-- 4. Completed / Obsolete: 操作不可 -->
+                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Completed}">
+                        <Setter Property="Content" Value="Complete" />
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Obsolete}">
+                        <Setter Property="Content" Value="Obsolete" />
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Button.Style>
+    </Button>
+</UserControl>
