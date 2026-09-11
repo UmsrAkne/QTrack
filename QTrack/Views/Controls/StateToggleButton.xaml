@@ -10,47 +10,212 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+        <Style x:Key="ButtonContentTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="0,0,0,2" />
+        </Style>
+    </UserControl.Resources>
+
     <Button Click="OnButtonClick">
+        <Button.Effect>
+            <DropShadowEffect
+                BlurRadius="3"
+                Direction="270"
+                Opacity="0.5"
+                ShadowDepth="2" />
+        </Button.Effect>
+
         <Button.Style>
             <Style TargetType="Button">
                 <!-- 基本スタイル -->
-                <Setter Property="Padding" Value="10,2" />
+                <Setter Property="Padding" Value="0" />
                 <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border
+                                x:Name="ButtonBorder"
+                                Padding="{TemplateBinding Padding}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                                <Border.Background>
+                                    <SolidColorBrush Color="#4CAF50" />
+                                </Border.Background>
 
-                <!-- 状態（IssueState）ごとの見た目の切り替え -->
-                <Style.Triggers>
-                    <!-- 1. Created: 開始待ち -->
-                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Created}">
-                        <Setter Property="Content" Value="Start" />
-                        <Setter Property="Background" Value="#4CAF50" />
-                        <Setter Property="Foreground" Value="White" />
-                    </DataTrigger>
+                                <Grid>
+                                    <!-- マウスオーバー用オーバーレイ -->
+                                    <Border
+                                        x:Name="HoverOverlay"
+                                        Background="White"
+                                        CornerRadius="6"
+                                        IsHitTestVisible="False"
+                                        Opacity="0" />
 
-                    <!-- 2. InProgress: 作業中（押すと一時停止） -->
-                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.InProgress}">
-                        <Setter Property="Content" Value="Pause" />
-                        <Setter Property="Background" Value="#FF9800" />
-                        <Setter Property="Foreground" Value="White" />
-                    </DataTrigger>
+                                    <ContentPresenter
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        RecognizesAccessKey="True"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Grid>
+                            </Border>
 
-                    <!-- 3. Pausing: 一時停止中（押すと再開） -->
-                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Pausing}">
-                        <Setter Property="Content" Value="Restart" />
-                        <Setter Property="Background" Value="#2196F3" />
-                        <Setter Property="Foreground" Value="White" />
-                    </DataTrigger>
+                            <ControlTemplate.Triggers>
+                                <!-- マウスオーバーアニメーション -->
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="HoverOverlay"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0.2"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="HoverOverlay"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0.0"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
 
-                    <!-- 4. Completed / Obsolete: 操作不可 -->
-                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Completed}">
-                        <Setter Property="Content" Value="Complete" />
-                        <Setter Property="IsEnabled" Value="False" />
-                    </DataTrigger>
+                                <!-- 状態（IssueState）ごとの見た目と背景色アニメーション切り替え -->
+                                <!-- 1. Created: 開始待ち -->
+                                <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Created}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock Style="{StaticResource ButtonContentTextBlockStyle}" Text="Start" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#4CAF50"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
 
-                    <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Obsolete}">
-                        <Setter Property="Content" Value="Obsolete" />
-                        <Setter Property="IsEnabled" Value="False" />
-                    </DataTrigger>
-                </Style.Triggers>
+                                <!-- 2. InProgress: 作業中（押すと一時停止） -->
+                                <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.InProgress}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock Style="{StaticResource ButtonContentTextBlockStyle}" Text="Pause" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#FF9800"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+
+                                <!-- 3. Pausing: 一時停止中（押すと再開） -->
+                                <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Pausing}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock Style="{StaticResource ButtonContentTextBlockStyle}" Text="Resume" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#2196F3"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#FF9800"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                </DataTrigger>
+
+                                <!-- 4. Completed / Obsolete: 操作不可 -->
+                                <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Completed}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock Style="{StaticResource ButtonContentTextBlockStyle}" Text="Complete" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#9E9E9E"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Obsolete}">
+                                    <Setter Property="Content">
+                                        <Setter.Value>
+                                            <TextBlock Style="{StaticResource ButtonContentTextBlockStyle}" Text="Obsolete" />
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#616161"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+
+                                <!-- 無効化時 -->
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.6" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
         </Button.Style>
     </Button>
