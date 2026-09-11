@@ -25,6 +25,9 @@ namespace QTrack.Services
             p3.IsArchive = true;
             p3.Name = "Project (Archived)";
 
+            var p4 = list[4];
+            p4.Name = "オープンに失敗するプロジェクト (Fail)";
+
             return await Task.FromResult(list);
         }
     }

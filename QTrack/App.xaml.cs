@@ -33,6 +33,10 @@ public partial class App
 
         containerRegistry.RegisterSingleton<ProjectsViewModel>();
         containerRegistry.Register<IssuesViewModel>();
+
+        var settings = AppSettings.Load();
+        settings.Save();
+        containerRegistry.RegisterInstance(settings);
     }
 
     protected override Window CreateShell()

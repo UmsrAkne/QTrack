@@ -1,4 +1,5 @@
-﻿using QTrack.Models;
+﻿using System.Net.Http;
+using QTrack.Models;
 
 namespace QTrack.Services
 {
@@ -6,6 +7,13 @@ namespace QTrack.Services
     {
         public async Task<List<Issue>> GetIssuesAsync(Project project, int count)
         {
+            // プロジェクトを開くのに失敗したケースを再現するための設定
+            if (project.Name.Contains("Fail", StringComparison.OrdinalIgnoreCase))
+            {
+                await Task.Delay(500); // 実際の通信を模した遅延
+                throw new HttpRequestException("プロジェクトの取得に失敗しました。(Status: 500 Internal Server Error)");
+            }
+
             var l = new List<Issue>();
             for (var i = 0; i < 10; i++)
             {
