@@ -10,6 +10,7 @@ namespace QTrack.ViewModels
     public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
+        private readonly ILiteDbService dbService;
         private AsyncRelayCommand? fetchProjectsCommand;
         private Project? selectedProject;
         private bool isLoading;
@@ -24,11 +25,12 @@ namespace QTrack.ViewModels
             Projects.AddRange(list.Result);
         }
 
-        public ProjectsViewModel(IProjectService projectService)
+        public ProjectsViewModel(IProjectService projectService, ILiteDbService dbService)
         {
             AppLogger.Info("IssuesViewModel created");
             AppLogger.Info(projectService.ToString() ?? string.Empty);
             this.projectService = projectService;
+            this.dbService = dbService;
         }
 
         public event EventHandler<Project>? OpenProjectEvent;
