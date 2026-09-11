@@ -42,6 +42,13 @@
                 TopRight="8" />
 
             <Style x:Key="ListBoxItemContainerStyle" TargetType="ListBoxItem">
+                <Style.Triggers>
+                    <Trigger Property="ListBox.AlternationIndex" Value="1">
+                        <Setter Property="BorderThickness" Value="0,1,0,0" />
+                        <Setter Property="BorderBrush" Value="#505080" />
+                    </Trigger>
+                </Style.Triggers>
+
                 <Setter Property="Margin" Value="1" />
                 <Setter Property="Padding" Value="4" />
 

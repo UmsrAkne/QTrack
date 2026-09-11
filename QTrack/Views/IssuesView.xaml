@@ -18,7 +18,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}" ItemsSource="{Binding Issues}">
+        <ListBox
+            AlternationCount="2"
+            ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
+            ItemsSource="{Binding Issues}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:Issue}">
                     <StackPanel Margin="5,1" Orientation="Horizontal">
