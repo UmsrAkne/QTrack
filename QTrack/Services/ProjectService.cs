@@ -52,7 +52,30 @@ namespace QTrack.Services
 
         public async Task PopulateUpdatedAt(IEnumerable<Project> projects)
         {
-            var issues = await issueService.GetIssuesAsync(new IssueSearchCriteria());
+            var searchCriteria = new IssueSearchCriteria
+            {
+                Top = 100,
+                SortByUpdatedDesc = true,
+            };
+
+            var issues = await issueService.GetIssuesAsync(searchCriteria);
+
+            // 1. プロジェクトコード（ShortName）ごとに最新の UpdatedAt を抽出して辞書化
+            var latestUpdatedByProject = issues
+                .Where(issue => !string.IsNullOrEmpty(issue.IdReadable))
+                .GroupBy(issue => issue.IdReadable[..issue.IdReadable.LastIndexOf('-')]) // "QTR-37" -> "QTR"
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Max(issue => issue.UpdatedAt));
+
+            // 2. 各 Project の ShortName と照合して UpdatedAt を書き込み
+            foreach (var project in projects)
+            {
+                if (project.ShortName != null && latestUpdatedByProject.TryGetValue(project.ShortName, out var latestUpdatedAt))
+                {
+                    project.UpdatedAt = latestUpdatedAt;
+                }
+            }
         }
 
         private sealed class YouTrackProjectDto

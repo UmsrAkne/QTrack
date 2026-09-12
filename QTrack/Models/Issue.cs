@@ -12,7 +12,7 @@
 
         public string Id { get; init; } = "";
 
-        public string IdReadable { get; init; } = "";
+        public string IdReadable { get; set; } = "";
 
         public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value); }
 

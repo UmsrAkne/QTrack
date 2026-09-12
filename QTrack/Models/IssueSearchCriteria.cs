@@ -10,6 +10,10 @@
 
         public bool SortByUpdatedDesc { get; set; } = true;
 
+        public int Skip { get; set; }
+
+        public int Top { get; set; }
+
         /// <summary>
         /// YouTrack API 用のクエリ文字列 を生成します。
         /// </summary>

@@ -75,6 +75,8 @@ namespace QTrack.ViewModels
         {
             var l = await projectService.GetAllProjectsAsync();
             var list = l.ToList();
+            await projectService.PopulateUpdatedAt(list);
+
             Projects.Clear();
             Projects.AddRange(list);
             return list;

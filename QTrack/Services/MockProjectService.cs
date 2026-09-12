@@ -37,6 +37,13 @@ namespace QTrack.Services
 
         public Task PopulateUpdatedAt(IEnumerable<Project> projects)
         {
+            var cnt = 0;
+            foreach (var p in projects.ToList())
+            {
+                cnt++;
+                p.UpdatedAt = DateTime.Now - TimeSpan.FromSeconds(cnt * 5);
+            }
+
             return Task.CompletedTask;
         }
     }
