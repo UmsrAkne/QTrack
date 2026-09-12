@@ -34,6 +34,11 @@ namespace QTrack.Services
             return await Task.FromResult(l);
         }
 
+        public Task<List<Issue>> GetIssuesAsync(IssueSearchCriteria criteria)
+        {
+            return Task.FromResult(new List<Issue>());
+        }
+
         public async Task<Issue> CreateIssueAsync(Project project, string summary, string description)
         {
             // 投稿後に数秒待機

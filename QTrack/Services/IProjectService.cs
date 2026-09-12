@@ -9,5 +9,7 @@ namespace QTrack.Services
         /// </summary>
         /// <returns>権限内で取得可能な全てのプロジェクト</returns>
         Task<IEnumerable<Project>> GetAllProjectsAsync();
+
+        Task PopulateUpdatedAt(IEnumerable<Project> projects);
     }
 }

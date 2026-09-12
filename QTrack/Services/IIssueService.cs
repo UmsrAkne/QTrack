@@ -6,6 +6,8 @@ namespace QTrack.Services
     {
         Task<List<Issue>> GetIssuesAsync(Project project, int count);
 
+        Task<List<Issue>> GetIssuesAsync(IssueSearchCriteria criteria);
+
         Task<Issue> CreateIssueAsync(Project project, string summary, string description);
     }
 }

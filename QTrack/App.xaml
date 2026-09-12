@@ -42,6 +42,36 @@
                 TopRight="8" />
 
             <Style x:Key="ListBoxItemContainerStyle" TargetType="ListBoxItem">
+                <Style.Triggers>
+                    <!-- 1行目：少し明るめのグロー（光） -->
+                    <Trigger Property="ListBox.AlternationIndex" Value="0">
+                        <Setter Property="BorderThickness" Value="0,1,0,0" />
+                        <Setter Property="BorderBrush">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="0.0" Color="#809999EE" />
+                                    <!-- 左：パレットのLightBorderBrush系 -->
+                                    <GradientStop Offset="0.25" Color="#409999EE" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+
+                    <!-- 2行目：かなり控えめなベースライン -->
+                    <Trigger Property="ListBox.AlternationIndex" Value="1">
+                        <Setter Property="BorderThickness" Value="0,1,0,0" />
+                        <Setter Property="BorderBrush">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Offset="0.0" Color="#304466" />
+                                    <!-- 左：暗めのブルーグレー -->
+                                    <GradientStop Offset="0.3" Color="#203044" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+
                 <Setter Property="Margin" Value="1" />
                 <Setter Property="Padding" Value="4" />
 

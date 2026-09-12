@@ -10,6 +10,7 @@ namespace QTrack.ViewModels
     public class ProjectsViewModel : BindableBase, ITabViewModels
     {
         private readonly IProjectService projectService;
+        private readonly ILiteDbService dbService;
         private AsyncRelayCommand? fetchProjectsCommand;
         private Project? selectedProject;
         private bool isLoading;
@@ -24,11 +25,12 @@ namespace QTrack.ViewModels
             Projects.AddRange(list.Result);
         }
 
-        public ProjectsViewModel(IProjectService projectService)
+        public ProjectsViewModel(IProjectService projectService, ILiteDbService dbService)
         {
             AppLogger.Info("IssuesViewModel created");
             AppLogger.Info(projectService.ToString() ?? string.Empty);
             this.projectService = projectService;
+            this.dbService = dbService;
         }
 
         public event EventHandler<Project>? OpenProjectEvent;
@@ -50,9 +52,8 @@ namespace QTrack.ViewModels
             {
                 try
                 {
-                    var l = await projectService.GetAllProjectsAsync();
-                    Projects.Clear();
-                    Projects.AddRange(l);
+                    var fetched = await FetchProjects();
+                    CacheProjects(fetched);
                 }
                 catch (Exception e)
                 {
@@ -69,5 +70,21 @@ namespace QTrack.ViewModels
                 IsLoading = true;
             }
         });
+
+        private async Task<List<Project>> FetchProjects()
+        {
+            var l = await projectService.GetAllProjectsAsync();
+            var list = l.ToList();
+            await projectService.PopulateUpdatedAt(list);
+
+            Projects.Clear();
+            Projects.AddRange(list);
+            return list;
+        }
+
+        private void CacheProjects(List<Project> list)
+        {
+            dbService.Upsert<Project>(list);
+        }
     }
 }

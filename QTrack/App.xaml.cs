@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using DotNetEnv;
+using LiteDB;
 using QTrack.Services;
 using QTrack.Utils;
 using QTrack.ViewModels;
@@ -37,6 +39,12 @@ public partial class App
         var settings = AppSettings.Load();
         settings.Save();
         containerRegistry.RegisterInstance(settings);
+
+        // LiteDB の初期設定
+        var dbPath = Path.Combine(AppContext.BaseDirectory, "AppData.db");
+        var connectionString = $"Filename={dbPath};Connection=shared";
+        var litedb = new LiteDatabase(connectionString);
+        containerRegistry.RegisterInstance<ILiteDbService>(new LiteDbService(litedb));
     }
 
     protected override Window CreateShell()

@@ -9,7 +9,11 @@ namespace QTrack.Services
             var list = new List<Project>();
             for (var i = 0; i < 40; i++)
             {
-                list.Add(new Project { Name = $"Project {i:D3}", });
+                list.Add(new Project
+                {
+                    Id = $"Debug_proj_{i:D3}",
+                    Name = $"Project {i:D3}",
+                });
             }
 
             var p1 = list[1];
@@ -29,6 +33,18 @@ namespace QTrack.Services
             p4.Name = "オープンに失敗するプロジェクト (Fail)";
 
             return await Task.FromResult(list);
+        }
+
+        public Task PopulateUpdatedAt(IEnumerable<Project> projects)
+        {
+            var cnt = 0;
+            foreach (var p in projects.ToList())
+            {
+                cnt++;
+                p.UpdatedAt = DateTime.Now - TimeSpan.FromSeconds(cnt * 5);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
