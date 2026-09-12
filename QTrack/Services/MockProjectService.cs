@@ -9,7 +9,11 @@ namespace QTrack.Services
             var list = new List<Project>();
             for (var i = 0; i < 40; i++)
             {
-                list.Add(new Project { Name = $"Project {i:D3}", });
+                list.Add(new Project
+                {
+                    Id = $"Debug_proj_{i:D3}",
+                    Name = $"Project {i:D3}",
+                });
             }
 
             var p1 = list[1];

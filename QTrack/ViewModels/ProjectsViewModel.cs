@@ -52,9 +52,8 @@ namespace QTrack.ViewModels
             {
                 try
                 {
-                    var l = await projectService.GetAllProjectsAsync();
-                    Projects.Clear();
-                    Projects.AddRange(l);
+                    var fetched = await FetchProjects();
+                    CacheProjects(fetched);
                 }
                 catch (Exception e)
                 {
@@ -71,5 +70,19 @@ namespace QTrack.ViewModels
                 IsLoading = true;
             }
         });
+
+        private async Task<List<Project>> FetchProjects()
+        {
+            var l = await projectService.GetAllProjectsAsync();
+            var list = l.ToList();
+            Projects.Clear();
+            Projects.AddRange(list);
+            return list;
+        }
+
+        private void CacheProjects(List<Project> list)
+        {
+            dbService.Upsert<Project>(list);
+        }
     }
 }
