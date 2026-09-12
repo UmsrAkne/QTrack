@@ -34,5 +34,10 @@ namespace QTrack.Services
 
             return await Task.FromResult(list);
         }
+
+        public Task PopulateUpdatedAt(IEnumerable<Project> projects)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

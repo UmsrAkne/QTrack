@@ -39,6 +39,11 @@ namespace QTrack.Services
                 : rawIssues.Select(dto => dto.ToModel()).ToList();
         }
 
+        public Task<List<Issue>> GetIssuesAsync(IssueSearchCriteria criteria)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Issue> CreateIssueAsync(Project project, string summary, string description)
         {
             var url = $"{credentials.YoutrackIssuesEndpoint}?fields=id,idReadable,summary,description,updated,customFields(name,value(name,minutes,presentation)),links(direction,linkType(name),issues(idReadable))";

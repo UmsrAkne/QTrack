@@ -11,11 +11,13 @@ namespace QTrack.Services
     {
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
+        private readonly IIssueService issueService;
 
-        public ProjectService(ApiCredentials credentials, HttpClient? httpClient = null)
+        public ProjectService(ApiCredentials credentials, HttpClient? httpClient = null, IIssueService? issueService = null)
         {
             this.credentials = credentials;
             this.httpClient = httpClient ?? new HttpClient();
+            this.issueService = issueService ?? new IssueService(credentials, httpClient);
         }
 
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
@@ -46,6 +48,11 @@ namespace QTrack.Services
                 IsArchive = dto.Archived,
                 IsFavorite = false,
             });
+        }
+
+        public async Task PopulateUpdatedAt(IEnumerable<Project> projects)
+        {
+            var issues = await issueService.GetIssuesAsync(new IssueSearchCriteria());
         }
 
         private sealed class YouTrackProjectDto
