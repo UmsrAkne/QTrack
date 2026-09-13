@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace QTrack.Views.Controls
 {
@@ -11,9 +12,18 @@ namespace QTrack.Views.Controls
                 typeof(CustomCheckBox),
                 new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
+        public readonly static DependencyProperty CommandProperty =
+            DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(CustomCheckBox));
+
         public CustomCheckBox()
         {
             InitializeComponent();
+        }
+
+        public ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public bool? IsChecked

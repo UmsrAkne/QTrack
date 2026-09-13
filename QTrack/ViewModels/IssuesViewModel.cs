@@ -13,6 +13,8 @@ namespace QTrack.ViewModels
         private Issue pendingIssue = new ();
         private AsyncRelayCommand? quickAddCommand;
         private AsyncRelayCommand? addIssueCommand;
+        private AsyncRelayCommand? toggleCompleteFlagCommand;
+        private Issue? selectedIssue;
 
         public IssuesViewModel()
         {
@@ -38,6 +40,8 @@ namespace QTrack.ViewModels
 
         public ObservableCollection<Issue> Issues { get; set; } = new ();
 
+        public Issue? SelectedIssue { get => selectedIssue; set => SetProperty(ref selectedIssue, value); }
+
         public Issue PendingIssue { get => pendingIssue; set => SetProperty(ref pendingIssue, value); }
 
         public AsyncRelayCommand QuickAddAsyncCommand =>
@@ -50,6 +54,18 @@ namespace QTrack.ViewModels
             addIssueCommand ??= new AsyncRelayCommand(async () =>
             {
                 await Task.CompletedTask;
+            });
+
+        public AsyncRelayCommand ToggleCompleteFlagAsyncCommand =>
+            toggleCompleteFlagCommand ??= new AsyncRelayCommand(async () =>
+            {
+                if (SelectedIssue == null)
+                {
+                    return;
+                }
+
+                SelectedIssue.IsCompleted = true;
+                SelectedIssue.State = SelectedIssue.IsCompleted ? IssueState.Completed : IssueState.Pausing;
             });
 
         public async Task InitializeAsync(Project project)
