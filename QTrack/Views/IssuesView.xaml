@@ -21,11 +21,12 @@
         <ListBox
             AlternationCount="2"
             ItemContainerStyle="{StaticResource ListBoxItemContainerStyle}"
-            ItemsSource="{Binding Issues}">
+            ItemsSource="{Binding Issues}"
+            SelectedItem="{Binding SelectedIssue}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:Issue}">
                     <StackPanel Margin="5,1" Orientation="Horizontal">
-                        <controls:CustomCheckBox IsChecked="{Binding IsCompleted}" />
+                        <controls:CustomCheckBox Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}" IsChecked="{Binding IsCompleted}" />
 
                         <Border Width="0" Margin="4,0" />
 

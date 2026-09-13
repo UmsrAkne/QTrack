@@ -183,9 +183,27 @@
                                                     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
                                                     To="#9E9E9E"
                                                     Duration="0:0:0.2" />
+
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0.7"
+                                                    Duration="0:0:0.2" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
+
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="ButtonBorder"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="1.0"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
                                 </DataTrigger>
 
                                 <DataTrigger Binding="{Binding State, ElementName=Root}" Value="{x:Static models:IssueState.Obsolete}">
