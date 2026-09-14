@@ -64,7 +64,6 @@ namespace QTrack.ViewModels
                     return;
                 }
 
-                issue.IsCompleted = true;
                 await issueService.CompleteIssueAsync(issue);
             });
 

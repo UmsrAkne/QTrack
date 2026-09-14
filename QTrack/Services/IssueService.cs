@@ -85,9 +85,37 @@ namespace QTrack.Services
             return resultDto?.ToModel() ?? throw new InvalidOperationException("Failed to deserialize the created issue.");
         }
 
-        public Task CompleteIssueAsync(Issue issue)
+        public async Task CompleteIssueAsync(Issue issue)
         {
-            throw new NotImplementedException();
+            var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}?fields=customFields(name,value(name))";
+
+            var payload = new Dictionary<string, object>
+            {
+                ["customFields"] = new[]
+                {
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "State",
+                        ["$type"] = "StateIssueCustomField",
+                        ["value"] = new Dictionary<string, object>
+                        {
+                            ["name"] = "完了",
+                            ["$type"] = "StateBundleElement",
+                        },
+                    },
+                },
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.YoutrackApiKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Content = JsonContent.Create(payload);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            issue.IsCompleted = true;
+            issue.State = IssueState.Completed;
         }
     }
 }
