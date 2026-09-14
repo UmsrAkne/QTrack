@@ -164,6 +164,7 @@
     <!-- コントロール本体 -->
     <CheckBox
         Command="{Binding ElementName=Root, Path=Command}"
+        CommandParameter="{Binding ElementName=Root, Path=CommandParameter}"
         IsChecked="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=UserControl}}"
         Style="{StaticResource ModernDarkCheckBoxStyle}" />
 </UserControl>
