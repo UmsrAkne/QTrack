@@ -84,5 +84,10 @@ namespace QTrack.Services
 
             return resultDto?.ToModel() ?? throw new InvalidOperationException("Failed to deserialize the created issue.");
         }
+
+        public Task CompleteIssueAsync(Issue issue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

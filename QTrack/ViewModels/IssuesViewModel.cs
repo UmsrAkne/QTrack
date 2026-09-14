@@ -65,7 +65,7 @@ namespace QTrack.ViewModels
                 }
 
                 issue.IsCompleted = true;
-                issue.State = issue.IsCompleted ? IssueState.Completed : IssueState.Pausing;
+                await issueService.CompleteIssueAsync(issue);
             });
 
         public async Task InitializeAsync(Project project)

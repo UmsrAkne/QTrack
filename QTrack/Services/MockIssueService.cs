@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using QTrack.Models;
+using QTrack.Utils;
 
 namespace QTrack.Services
 {
@@ -56,6 +57,13 @@ namespace QTrack.Services
             };
 
             return issue;
+        }
+
+        public Task CompleteIssueAsync(Issue issue)
+        {
+            AppLogger.Info("CompleteIssueAsync executed");
+            issue.State = issue.IsCompleted ? IssueState.Completed : IssueState.Pausing;
+            return Task.CompletedTask;
         }
     }
 }
