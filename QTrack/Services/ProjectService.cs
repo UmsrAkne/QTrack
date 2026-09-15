@@ -17,15 +17,15 @@ namespace QTrack.Services
 
         public ProjectService(
             ApiCredentials credentials,
-            HttpClient? httpClient = null,
-            IIssueService? issueService = null,
-            ILiteDbService? dbService = null,
-            AppSettings? appSettings = null)
+            HttpClient httpClient,
+            IIssueService issueService,
+            ILiteDbService dbService,
+            AppSettings appSettings)
         {
             this.credentials = credentials;
-            this.httpClient = httpClient ?? new HttpClient();
-            this.issueService = issueService ?? new IssueService(credentials, httpClient);
-            this.appSettings = appSettings ?? AppSettings.Load();
+            this.httpClient = httpClient;
+            this.issueService = issueService;
+            this.appSettings = appSettings;
             this.dbService = dbService;
         }
 
