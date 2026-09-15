@@ -44,7 +44,8 @@ namespace QTrack.Services
 
         public async Task<List<Issue>> GetIssuesAsync(IssueSearchCriteria criteria)
         {
-            var query = $"query={criteria.ToQueryString()}&$top={criteria.Top}&{fields}";
+            var topQuery = criteria.Top > 0 ? $"&$top={criteria.Top}" : string.Empty;
+            var query = $"query={criteria.ToQueryString()}&{fields}{topQuery}";
             var url = $"{credentials.YoutrackIssuesEndpoint}?{query}";
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);

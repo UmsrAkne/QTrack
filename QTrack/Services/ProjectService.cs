@@ -12,12 +12,21 @@ namespace QTrack.Services
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
         private readonly IIssueService issueService;
+        private readonly AppSettings appSettings;
+        private readonly ILiteDbService? dbService;
 
-        public ProjectService(ApiCredentials credentials, HttpClient? httpClient = null, IIssueService? issueService = null)
+        public ProjectService(
+            ApiCredentials credentials,
+            HttpClient? httpClient = null,
+            IIssueService? issueService = null,
+            ILiteDbService? dbService = null,
+            AppSettings? appSettings = null)
         {
             this.credentials = credentials;
             this.httpClient = httpClient ?? new HttpClient();
             this.issueService = issueService ?? new IssueService(credentials, httpClient);
+            this.appSettings = appSettings ?? AppSettings.Load();
+            this.dbService = dbService;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
@@ -52,29 +61,60 @@ namespace QTrack.Services
 
         public async Task PopulateUpdatedAt(IEnumerable<Project> projects)
         {
+            var projectList = projects.ToList();
+            if (dbService != null)
+            {
+                foreach (var p in projectList)
+                {
+                    var cachedProject = dbService.Get<Project>(p.Id);
+                    if (cachedProject != null)
+                    {
+                        p.UpdatedAt = cachedProject.UpdatedAt;
+                    }
+                }
+            }
+
             var searchCriteria = new IssueSearchCriteria
             {
-                Top = 100,
                 SortByUpdatedDesc = true,
             };
 
+            if (appSettings.LastIssueFetchDateTime.HasValue)
+            {
+                AppLogger.Info($"Last issue fetch date found, fetching issues updated after {appSettings.LastIssueFetchDateTime.Value}");
+                searchCriteria.FromDate = appSettings.LastIssueFetchDateTime.Value;
+            }
+            else
+            {
+                AppLogger.Info("No last issue fetch date found, fetching all issues");
+                searchCriteria.Top = 200;
+            }
+
             var issues = await issueService.GetIssuesAsync(searchCriteria);
+
+            appSettings.LastIssueFetchDateTime = DateTime.Now;
+            await appSettings.SaveAsync();
 
             // 1. プロジェクトコード（ShortName）ごとに最新の UpdatedAt を抽出して辞書化
             var latestUpdatedByProject = issues
-                .Where(issue => !string.IsNullOrEmpty(issue.IdReadable))
+                .Where(issue => !string.IsNullOrEmpty(issue.IdReadable) && issue.IdReadable.Contains('-'))
                 .GroupBy(issue => issue.IdReadable[..issue.IdReadable.LastIndexOf('-')]) // "QTR-37" -> "QTR"
                 .ToDictionary(
                     group => group.Key,
                     group => group.Max(issue => issue.UpdatedAt));
 
             // 2. 各 Project の ShortName と照合して UpdatedAt を書き込み
-            foreach (var project in projects)
+            foreach (var project in projectList)
             {
                 if (project.ShortName != null && latestUpdatedByProject.TryGetValue(project.ShortName, out var latestUpdatedAt))
                 {
-                    project.UpdatedAt = latestUpdatedAt;
+                    if (project.UpdatedAt < latestUpdatedAt)
+                    {
+                        project.UpdatedAt = latestUpdatedAt;
+                    }
                 }
+
+                dbService?.Upsert(project);
             }
         }
 
