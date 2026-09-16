@@ -40,6 +40,11 @@ namespace QTrack.Services
             return Task.FromResult(new List<Issue>());
         }
 
+        public Task<List<Issue>> FetchRecentlyUpdatedIssuesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Issue> CreateIssueAsync(Project project, string summary, string description)
         {
             // 投稿後に数秒待機

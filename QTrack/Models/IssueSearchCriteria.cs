@@ -8,6 +8,8 @@
 
         public string? Keyword { get; set; }
 
+        public DateTime? FromDate { get; set; }
+
         public bool SortByUpdatedDesc { get; set; } = true;
 
         public int Skip { get; set; }
@@ -35,6 +37,11 @@
             if (!string.IsNullOrWhiteSpace(Keyword))
             {
                 parts.Add(Keyword);
+            }
+
+            if (FromDate.HasValue)
+            {
+                parts.Add($"updated: {FromDate.Value:yyyy-MM-dd} .. *");
             }
 
             if (SortByUpdatedDesc)

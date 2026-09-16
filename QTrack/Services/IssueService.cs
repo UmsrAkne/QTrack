@@ -11,16 +11,18 @@ namespace QTrack.Services
     {
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
+        private readonly AppSettings appSettings;
 
         private readonly string fields =
             "fields=id,idReadable,summary,description,updated,customFields(name,value(name,minutes,presentation)),links(direction,linkType(name),issues(idReadable))";
 
-        public IssueService(ApiCredentials credentials, HttpClient? httpClient = null)
+        public IssueService(ApiCredentials credentials, AppSettings appSettings, HttpClient? httpClient = null)
         {
             AppLogger.Info("IssueService created");
 
             this.credentials = credentials;
             this.httpClient = httpClient ?? new HttpClient();
+            this.appSettings = appSettings;
         }
 
         public async Task<List<Issue>> GetIssuesAsync(Project project, int count)
@@ -44,7 +46,8 @@ namespace QTrack.Services
 
         public async Task<List<Issue>> GetIssuesAsync(IssueSearchCriteria criteria)
         {
-            var query = $"query={criteria.ToQueryString()}&$top={criteria.Top}&{fields}";
+            var topQuery = criteria.Top > 0 ? $"&$top={criteria.Top}" : string.Empty;
+            var query = $"query={criteria.ToQueryString()}&{fields}{topQuery}";
             var url = $"{credentials.YoutrackIssuesEndpoint}?{query}";
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
@@ -59,6 +62,30 @@ namespace QTrack.Services
             return rawIssues == null
                 ? new List<Issue>()
                 : rawIssues.Select(dto => dto.ToModel()).ToList();
+        }
+
+        public async Task<List<Issue>> FetchRecentlyUpdatedIssuesAsync()
+        {
+            var criteria = new IssueSearchCriteria { SortByUpdatedDesc = true, };
+
+            if (appSettings.LastIssueFetchDateTime.HasValue)
+            {
+                AppLogger.Info($"Fetching issues updated after {appSettings.LastIssueFetchDateTime.Value}");
+                criteria.FromDate = appSettings.LastIssueFetchDateTime.Value;
+            }
+            else
+            {
+                AppLogger.Info("No last issue fetch date found, fetching all issues");
+                criteria.Top = 200;
+            }
+
+            var issues = await GetIssuesAsync(criteria);
+
+            // タイムスタンプの管理も IssueService 側で完結
+            appSettings.LastIssueFetchDateTime = DateTime.Now;
+            await appSettings.SaveAsync();
+
+            return issues;
         }
 
         public async Task<Issue> CreateIssueAsync(Project project, string summary, string description)
