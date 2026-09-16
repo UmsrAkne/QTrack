@@ -35,7 +35,7 @@ namespace QTrack.Tests.Services
                 YoutrackIssuesEndpoint = "https://example.youtrack.cloud/api/issues",
                 YoutrackProjectsEndpoint = "https://example.youtrack.cloud/api/projects",
             };
-            var service = new IssueService(credentials, httpClient);
+            var service = new IssueService(credentials, new AppSettings(), httpClient);
 
             var criteria = new IssueSearchCriteria
             {

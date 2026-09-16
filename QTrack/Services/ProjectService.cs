@@ -74,26 +74,7 @@ namespace QTrack.Services
                 }
             }
 
-            var searchCriteria = new IssueSearchCriteria
-            {
-                SortByUpdatedDesc = true,
-            };
-
-            if (appSettings.LastIssueFetchDateTime.HasValue)
-            {
-                AppLogger.Info($"Last issue fetch date found, fetching issues updated after {appSettings.LastIssueFetchDateTime.Value}");
-                searchCriteria.FromDate = appSettings.LastIssueFetchDateTime.Value;
-            }
-            else
-            {
-                AppLogger.Info("No last issue fetch date found, fetching all issues");
-                searchCriteria.Top = 200;
-            }
-
-            var issues = await issueService.GetIssuesAsync(searchCriteria);
-
-            appSettings.LastIssueFetchDateTime = DateTime.Now;
-            await appSettings.SaveAsync();
+            var issues = await issueService.FetchRecentlyUpdatedIssuesAsync();
 
             // 1. プロジェクトコード（ShortName）ごとに最新の UpdatedAt を抽出して辞書化
             var latestUpdatedByProject = issues
