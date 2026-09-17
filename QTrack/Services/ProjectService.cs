@@ -12,7 +12,7 @@ namespace QTrack.Services
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
         private readonly IIssueService issueService;
-        private readonly ILiteDbService? dbService;
+        private readonly ILiteDbService dbService;
 
         public ProjectService(
             ApiCredentials credentials,
@@ -59,15 +59,12 @@ namespace QTrack.Services
         public async Task PopulateUpdatedAt(IEnumerable<Project> projects)
         {
             var projectList = projects.ToList();
-            if (dbService != null)
+            foreach (var p in projectList)
             {
-                foreach (var p in projectList)
+                var cachedProject = dbService.Get<Project>(p.Id);
+                if (cachedProject != null)
                 {
-                    var cachedProject = dbService.Get<Project>(p.Id);
-                    if (cachedProject != null)
-                    {
-                        p.UpdatedAt = cachedProject.UpdatedAt;
-                    }
+                    p.UpdatedAt = cachedProject.UpdatedAt;
                 }
             }
 
