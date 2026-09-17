@@ -72,8 +72,7 @@ namespace QTrack.Services
 
             // 1. プロジェクトコード（ShortName）ごとに最新の UpdatedAt を抽出して辞書化
             var latestUpdatedByProject = issues
-                .Where(issue => !string.IsNullOrEmpty(issue.IdReadable) && issue.IdReadable.Contains('-'))
-                .GroupBy(issue => issue.IdReadable[..issue.IdReadable.LastIndexOf('-')]) // "QTR-37" -> "QTR"
+                .GroupBy(issue => issue.GetProjectShortName())
                 .ToDictionary(
                     group => group.Key,
                     group => group.Max(issue => issue.UpdatedAt));
