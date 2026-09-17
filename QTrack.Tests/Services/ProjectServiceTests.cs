@@ -61,13 +61,8 @@ namespace QTrack.Tests.Services
                 ShouldThrow = true,
             };
 
-            var appSettings = new AppSettings
-            {
-                LastIssueFetchDateTime = lastFetchTime,
-            };
-
             var credentials = new ApiCredentials();
-            var service = new ProjectService(credentials, null, testIssueService, null, appSettings);
+            var service = new ProjectService(credentials, null, testIssueService, null);
 
             var projects = new List<Project>
             {
@@ -75,7 +70,6 @@ namespace QTrack.Tests.Services
             };
 
             Assert.ThrowsAsync<HttpRequestException>(async () => await service.PopulateUpdatedAt(projects));
-            Assert.That(appSettings.LastIssueFetchDateTime, Is.EqualTo(lastFetchTime));
         }
     }
 }

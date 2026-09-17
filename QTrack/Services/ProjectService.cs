@@ -12,20 +12,17 @@ namespace QTrack.Services
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
         private readonly IIssueService issueService;
-        private readonly AppSettings appSettings;
         private readonly ILiteDbService? dbService;
 
         public ProjectService(
             ApiCredentials credentials,
             HttpClient httpClient,
             IIssueService issueService,
-            ILiteDbService dbService,
-            AppSettings appSettings)
+            ILiteDbService dbService)
         {
             this.credentials = credentials;
             this.httpClient = httpClient;
             this.issueService = issueService;
-            this.appSettings = appSettings;
             this.dbService = dbService;
         }
 
