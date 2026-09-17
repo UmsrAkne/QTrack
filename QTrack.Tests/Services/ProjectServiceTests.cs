@@ -1,3 +1,4 @@
+using LiteDB;
 using QTrack.Models;
 using QTrack.Services;
 using QTrack.Utils;
@@ -61,13 +62,8 @@ namespace QTrack.Tests.Services
                 ShouldThrow = true,
             };
 
-            var appSettings = new AppSettings
-            {
-                LastIssueFetchDateTime = lastFetchTime,
-            };
-
             var credentials = new ApiCredentials();
-            var service = new ProjectService(credentials, null, testIssueService, null, appSettings);
+            var service = new ProjectService(credentials, null!, testIssueService, new TestDbService());
 
             var projects = new List<Project>
             {
@@ -75,7 +71,29 @@ namespace QTrack.Tests.Services
             };
 
             Assert.ThrowsAsync<HttpRequestException>(async () => await service.PopulateUpdatedAt(projects));
-            Assert.That(appSettings.LastIssueFetchDateTime, Is.EqualTo(lastFetchTime));
+        }
+    }
+
+    public class TestDbService : ILiteDbService
+    {
+        public T? Get<T>(BsonValue id, string? collectionName = null)
+        {
+            return default;
+        }
+
+        public IEnumerable<T> GetAll<T>(string? collectionName = null)
+        {
+            return new List<T>();
+        }
+
+        public bool Upsert<T>(T entity, string? collectionName = null)
+        {
+            return true;
+        }
+
+        public int Upsert<T>(IEnumerable<T> entities, string? collectionName = null)
+        {
+            return 0;
         }
     }
 }

@@ -33,5 +33,15 @@
         public int EntryNo { get => entryNo; set => SetProperty(ref entryNo, value); }
 
         public int Rate { get => rate; set => SetProperty(ref rate, value); }
+
+        public string GetProjectShortName()
+        {
+            if (string.IsNullOrWhiteSpace(IdReadable) || !IdReadable.Contains('-'))
+            {
+                return string.Empty;
+            }
+
+            return IdReadable[..IdReadable.LastIndexOf('-')];
+        }
     }
 }

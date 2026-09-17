@@ -12,20 +12,17 @@ namespace QTrack.Services
         private readonly ApiCredentials credentials;
         private readonly HttpClient httpClient;
         private readonly IIssueService issueService;
-        private readonly AppSettings appSettings;
-        private readonly ILiteDbService? dbService;
+        private readonly ILiteDbService dbService;
 
         public ProjectService(
             ApiCredentials credentials,
             HttpClient httpClient,
             IIssueService issueService,
-            ILiteDbService dbService,
-            AppSettings appSettings)
+            ILiteDbService dbService)
         {
             this.credentials = credentials;
             this.httpClient = httpClient;
             this.issueService = issueService;
-            this.appSettings = appSettings;
             this.dbService = dbService;
         }
 
@@ -62,15 +59,12 @@ namespace QTrack.Services
         public async Task PopulateUpdatedAt(IEnumerable<Project> projects)
         {
             var projectList = projects.ToList();
-            if (dbService != null)
+            foreach (var p in projectList)
             {
-                foreach (var p in projectList)
+                var cachedProject = dbService.Get<Project>(p.Id);
+                if (cachedProject != null)
                 {
-                    var cachedProject = dbService.Get<Project>(p.Id);
-                    if (cachedProject != null)
-                    {
-                        p.UpdatedAt = cachedProject.UpdatedAt;
-                    }
+                    p.UpdatedAt = cachedProject.UpdatedAt;
                 }
             }
 
@@ -78,8 +72,7 @@ namespace QTrack.Services
 
             // 1. プロジェクトコード（ShortName）ごとに最新の UpdatedAt を抽出して辞書化
             var latestUpdatedByProject = issues
-                .Where(issue => !string.IsNullOrEmpty(issue.IdReadable) && issue.IdReadable.Contains('-'))
-                .GroupBy(issue => issue.IdReadable[..issue.IdReadable.LastIndexOf('-')]) // "QTR-37" -> "QTR"
+                .GroupBy(issue => issue.GetProjectShortName())
                 .ToDictionary(
                     group => group.Key,
                     group => group.Max(issue => issue.UpdatedAt));
