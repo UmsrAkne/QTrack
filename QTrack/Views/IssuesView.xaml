@@ -24,8 +24,12 @@
             ItemsSource="{Binding Issues}"
             SelectedItem="{Binding SelectedIssue}">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:Issue}">
-                    <StackPanel Margin="5,1" Orientation="Horizontal">
+                <DataTemplate DataType="{x:Type viewModels:IssueListItemViewModel}">
+                    <StackPanel
+                        Margin="5,1"
+                        DataContext="{Binding Issue}"
+                        Orientation="Horizontal">
+
                         <controls:CustomCheckBox
                             Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}"
                             CommandParameter="{Binding}"
