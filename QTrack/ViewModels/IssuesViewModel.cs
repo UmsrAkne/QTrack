@@ -69,7 +69,6 @@ namespace QTrack.ViewModels
 
         public async Task InitializeAsync(Project project)
         {
-            await Task.Delay(2000);
             CurrentProject = project;
 
             var issues = await issueService.GetIssuesAsync(project, 10);
