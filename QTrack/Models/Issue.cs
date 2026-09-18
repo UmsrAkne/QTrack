@@ -3,7 +3,7 @@
     public class Issue : BindableBase
     {
         private string summary = "";
-        private string? description;
+        private string? description = string.Empty;
         private string? type;
         private int entryNo;
         private int rate;
