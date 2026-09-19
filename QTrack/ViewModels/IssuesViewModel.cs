@@ -102,6 +102,9 @@ namespace QTrack.ViewModels
                     // 投稿失敗の場合は削除
                     Issues.Remove(item);
 
+                    PendingIssue.Summary = summary;
+                    PendingIssue.Description = description;
+
                     // 必要に応じて通知
                     // MessageBox、通知領域、Snackbar など
                     // await notificationService.ShowErrorAsync(...);

@@ -2,7 +2,7 @@
 {
     public class Issue : BindableBase
     {
-        private string summary = "";
+        private string summary = string.Empty;
         private string? description = string.Empty;
         private string? type;
         private int entryNo;
@@ -10,9 +10,9 @@
         private IssueState? state;
         private bool isCompleted;
 
-        public string Id { get; init; } = "";
+        public string Id { get; init; } = string.Empty;
 
-        public string IdReadable { get; set; } = "";
+        public string IdReadable { get; set; } = string.Empty;
 
         public bool IsCompleted { get => isCompleted; set => SetProperty(ref isCompleted, value); }
 
