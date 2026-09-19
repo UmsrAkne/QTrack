@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:QTrack.Models"
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     d:DataContext="{d:DesignInstance viewModels:IssuesViewModel}"
     d:DesignHeight="300"
