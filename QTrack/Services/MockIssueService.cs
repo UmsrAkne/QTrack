@@ -50,6 +50,11 @@ namespace QTrack.Services
             // 投稿後に数秒待機
             await Task.Delay(3000);
 
+            if (summary.Contains("Fail", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new HttpRequestException("サーバーの接続に失敗しました (Mock)");
+            }
+
             var issue = new Issue
             {
                 Id = "dummy-id",
