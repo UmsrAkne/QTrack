@@ -33,6 +33,9 @@ namespace QTrack.Services.DTOs
         [JsonPropertyName("customFields")]
         public List<CustomFieldDto>? CustomFields { get; set; }
 
+        [JsonPropertyName("links")]
+        public List<IssueLinkDto>? Links { get; set; }
+
         public Issue ToModel()
         {
             var issue = new Issue
@@ -62,6 +65,45 @@ namespace QTrack.Services.DTOs
             return issue;
         }
 
+        public List<string> GetLinkedIssueIds(string linkTypeName, string? direction = null)
+        {
+            if (Links == null)
+            {
+                return new List<string>();
+            }
+
+            return Links
+                .Where(l => string.Equals(l.LinkType?.Name, linkTypeName, StringComparison.OrdinalIgnoreCase)
+                            && (direction == null
+                                || string.Equals(l.Direction, direction, StringComparison.OrdinalIgnoreCase)))
+                .SelectMany(l => l.Issues ?? Enumerable.Empty<LinkedIssueDto>())
+                .Select(i => i.IdReadable)
+                .Where(id => !string.IsNullOrEmpty(id))
+                .Select(id => id!)
+                .ToList();
+        }
+
+        public IEnumerable<(string LinkType, string Direction, LinkedIssueDto Issue)> GetAllLinkedIssues()
+        {
+            if (Links == null)
+            {
+                yield break;
+            }
+
+            foreach (var link in Links)
+            {
+                if (link.Issues == null)
+                {
+                    continue;
+                }
+
+                foreach (var issue in link.Issues)
+                {
+                    yield return (link.LinkType?.Name ?? string.Empty, link.Direction ?? string.Empty, issue);
+                }
+            }
+        }
+
         private string? GetCustomFieldValue(string fieldName)
         {
             var field = CustomFields?.FirstOrDefault(f => f.Name == fieldName);
@@ -86,6 +128,45 @@ namespace QTrack.Services.DTOs
                 // null や その他
                 _ => null,
             };
+        }
+
+        public class IssueLinkDto
+        {
+            [JsonPropertyName("direction")]
+            public string? Direction { get; set; } // "OUTWARD", "INWARD", "BOTH"
+
+            [JsonPropertyName("linkType")]
+            public IssueLinkTypeDto? LinkType { get; set; }
+
+            [JsonPropertyName("issues")]
+            public List<LinkedIssueDto>? Issues { get; set; }
+
+            [JsonPropertyName("$type")]
+            public string? Type { get; set; }
+        }
+
+        public class IssueLinkTypeDto
+        {
+            [JsonPropertyName("name")]
+            public string? Name { get; set; } // "Subtask", "Depend", "Duplicate", "Relates" など
+
+            [JsonPropertyName("$type")]
+            public string? Type { get; set; }
+        }
+
+        public class LinkedIssueDto
+        {
+            [JsonPropertyName("id")]
+            public string? Id { get; set; }
+
+            [JsonPropertyName("idReadable")]
+            public string? IdReadable { get; set; }
+
+            [JsonPropertyName("summary")]
+            public string? Summary { get; set; }
+
+            [JsonPropertyName("$type")]
+            public string? Type { get; set; }
         }
     }
 }
