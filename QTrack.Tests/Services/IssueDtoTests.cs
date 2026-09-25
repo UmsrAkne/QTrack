@@ -6,6 +6,87 @@ namespace QTrack.Tests.Services
     [TestFixture]
     public class IssueDtoTests
     {
+        private const string LinkedIssueSample =
+            """
+            [
+                {
+                    "links": [
+                        {
+                            "direction": "BOTH",
+                            "linkType": {
+                                "name": "Relates",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "OUTWARD",
+                            "linkType": {
+                                "name": "Depend",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "INWARD",
+                            "linkType": {
+                                "name": "Depend",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "OUTWARD",
+                            "linkType": {
+                                "name": "Duplicate",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "INWARD",
+                            "linkType": {
+                                "name": "Duplicate",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "OUTWARD",
+                            "linkType": {
+                                "name": "Subtask",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [
+                                {
+                                    "idReadable": "DEB-2",
+                                    "$type": "Issue"
+                                }
+                            ],
+                            "$type": "IssueLink"
+                        },
+                        {
+                            "direction": "INWARD",
+                            "linkType": {
+                                "name": "Subtask",
+                                "$type": "IssueLinkType"
+                            },
+                            "issues": [],
+                            "$type": "IssueLink"
+                        }
+                    ],
+                    "idReadable": "DEB-1",
+                    "id": "2-7382",
+                    "$type": "Issue"
+                }
+            ]
+            """;
+
             private const string SampleJson = """
     [
         {
@@ -186,6 +267,23 @@ namespace QTrack.Tests.Services
             Assert.That(issue.EntryNo, Is.EqualTo(999));
             Assert.That(issue.Rate, Is.EqualTo(100));
             Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
+        }
+
+        [Test]
+        public void GetLinkedIssueIds_LinkedIssueSample_ReturnsSubtaskId()
+        {
+            var issues = JsonSerializer.Deserialize<List<IssueDto>>(LinkedIssueSample);
+
+            Assert.That(issues, Is.Not.Null);
+            Assert.That(issues.Count, Is.EqualTo(1));
+
+            var issue = issues[0];
+            var subtaskIds = issue.GetLinkedIssueIds("Subtask");
+
+            Assert.That(subtaskIds, Is.Not.Null);
+            Assert.That(subtaskIds, Contains.Item("DEB-2"));
+            Assert.That(subtaskIds.Count, Is.EqualTo(1));
+            Assert.That(subtaskIds[0], Is.EqualTo("DEB-2"));
         }
     }
 }
