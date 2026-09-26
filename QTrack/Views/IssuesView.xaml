@@ -9,7 +9,7 @@
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     d:DataContext="{d:DesignInstance viewModels:IssuesViewModel}"
     d:DesignHeight="300"
-    d:DesignWidth="600"
+    d:DesignWidth="1080"
     mc:Ignorable="d">
     <Grid Background="{StaticResource LightBackgroundBrush}">
         <Grid.RowDefinitions>
@@ -111,6 +111,17 @@
 
                     <!-- 2行目以降: トグルON時のみ表示されるUI -->
                     <StackPanel Margin="0,12,0,0" Visibility="{Binding IsChecked, ElementName=ExpandDetailToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel.Resources>
+                            <Style TargetType="materialDesign:NumericUpDown">
+                                <Setter Property="Foreground" Value="GhostWhite" />
+                                <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                            </Style>
+
+                            <Style TargetType="TextBox">
+                                <Setter Property="Foreground" Value="GhostWhite" />
+                                <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                            </Style>
+                        </StackPanel.Resources>
                         <Separator Margin="0,0,0,8" Background="{StaticResource LightBackgroundBrush}" />
 
                         <!-- 説明文 -->
@@ -125,22 +136,72 @@
 
                         <!-- プロパティ群（ステータス、優先度、担当者、期日など） -->
                         <WrapPanel Margin="0,8,0,0">
-                            <ComboBox
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="タイプ" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="Type" />
+                                </Border>
+                                <ComboBox
+                                    Width="150"
+                                    Height="35"
+                                    Margin="8,0" />
+                            </StackPanel>
 
-                            <materialDesign:NumericUpDown
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="Rate"
-                                Value="{Binding PendingIssue.Rate}" />
+                            <StackPanel Margin="30,0" Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Margin="0,0,10,0"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="Rate" />
+                                </Border>
 
-                            <materialDesign:NumericUpDown
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="Entry No"
-                                Value="{Binding PendingIssue.EntryNo}" />
+                                <materialDesign:NumericUpDown
+                                    Width="120"
+                                    Margin="0,0,8,0"
+                                    materialDesign:HintAssist.Hint="Rate"
+                                    Value="{Binding PendingIssue.Rate}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Margin="0,0,10,0"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="No. " />
+                                </Border>
+
+                                <materialDesign:NumericUpDown
+                                    Width="120"
+                                    Margin="0,0,8,0"
+                                    materialDesign:HintAssist.Hint="Entry No"
+                                    Value="{Binding PendingIssue.EntryNo}" />
+                            </StackPanel>
+
 
                         </WrapPanel>
                     </StackPanel>
