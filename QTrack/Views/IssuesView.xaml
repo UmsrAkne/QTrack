@@ -94,10 +94,10 @@
                             Style="{StaticResource MaterialDesignActionToggleButton}"
                             ToolTip="詳細フィールドを展開">
                             <ToggleButton.Content>
-                                <materialDesign:PackIcon Kind="ChevronDown" />
+                                <materialDesign:PackIcon Kind="ChevronUp" />
                             </ToggleButton.Content>
                             <materialDesign:ToggleButtonAssist.OnContent>
-                                <materialDesign:PackIcon Kind="ChevronUp" />
+                                <materialDesign:PackIcon Kind="ChevronDown" />
                             </materialDesign:ToggleButtonAssist.OnContent>
                         </ToggleButton>
 
