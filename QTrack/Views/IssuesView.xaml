@@ -24,28 +24,66 @@
             SelectedItem="{Binding SelectedIssue}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModels:IssueListItemViewModel}">
-                    <StackPanel
-                        Margin="5,1"
-                        DataContext="{Binding Issue}"
-                        Orientation="Horizontal">
+                    <Grid DataContext="{Binding Issue}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                        <controls:CustomCheckBox
-                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}"
-                            CommandParameter="{Binding}"
-                            IsChecked="{Binding IsCompleted}" />
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="5,1"
+                            Orientation="Horizontal">
 
-                        <Border Width="0" Margin="4,0" />
+                            <controls:CustomCheckBox
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}"
+                                CommandParameter="{Binding}"
+                                IsChecked="{Binding IsCompleted}" />
 
-                        <controls:StateToggleButton Width="90" State="{Binding State}" />
+                            <Border Width="0" Margin="4,0" />
 
-                        <Border Width="0" Margin="8,0" />
+                            <controls:StateToggleButton Width="90" State="{Binding State}" />
 
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            Foreground="WhiteSmoke"
-                            Text="{Binding Summary}" />
-                    </StackPanel>
+                            <Border Width="0" Margin="8,0" />
+
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Foreground="WhiteSmoke"
+                                Text="{Binding Summary}" />
+
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="5,0"
+                            VerticalAlignment="Bottom"
+                            Orientation="Horizontal">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Setter Property="FontWeight" Value="Regular" />
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <TextBlock Text="{Binding IdReadable}" />
+
+                            <TextBlock
+                                Margin="8,0"
+                                Foreground="DarkGray"
+                                Text="/" />
+
+                            <TextBlock Foreground="LightGray" Text="{Binding ActualDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+
+                            <TextBlock
+                                Margin="8,0"
+                                Foreground="DarkGray"
+                                Text="/" />
+
+                            <TextBlock Text="{Binding EstimatedDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
