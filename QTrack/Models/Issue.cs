@@ -9,6 +9,8 @@
         private int rate;
         private IssueState? state;
         private bool isCompleted;
+        private TimeSpan estimatedDuration;
+        private TimeSpan actualDuration;
 
         public string Id { get; init; } = string.Empty;
 
@@ -33,6 +35,18 @@
         public int EntryNo { get => entryNo; set => SetProperty(ref entryNo, value); }
 
         public int Rate { get => rate; set => SetProperty(ref rate, value); }
+
+        public TimeSpan EstimatedDuration
+        {
+            get => estimatedDuration;
+            set => SetProperty(ref estimatedDuration, value);
+        }
+
+        public TimeSpan ActualDuration
+        {
+            get => actualDuration;
+            set => SetProperty(ref actualDuration, value);
+        }
 
         public string GetProjectShortName()
         {

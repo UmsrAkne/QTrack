@@ -9,7 +9,7 @@
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     d:DataContext="{d:DesignInstance viewModels:IssuesViewModel}"
     d:DesignHeight="300"
-    d:DesignWidth="600"
+    d:DesignWidth="1080"
     mc:Ignorable="d">
     <Grid Background="{StaticResource LightBackgroundBrush}">
         <Grid.RowDefinitions>
@@ -24,28 +24,66 @@
             SelectedItem="{Binding SelectedIssue}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type viewModels:IssueListItemViewModel}">
-                    <StackPanel
-                        Margin="5,1"
-                        DataContext="{Binding Issue}"
-                        Orientation="Horizontal">
+                    <Grid DataContext="{Binding Issue}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                        <controls:CustomCheckBox
-                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}"
-                            CommandParameter="{Binding}"
-                            IsChecked="{Binding IsCompleted}" />
+                        <StackPanel
+                            Grid.Column="0"
+                            Margin="5,1"
+                            Orientation="Horizontal">
 
-                        <Border Width="0" Margin="4,0" />
+                            <controls:CustomCheckBox
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}, Path=DataContext.ToggleCompleteFlagAsyncCommand}"
+                                CommandParameter="{Binding}"
+                                IsChecked="{Binding IsCompleted}" />
 
-                        <controls:StateToggleButton Width="90" State="{Binding State}" />
+                            <Border Width="0" Margin="4,0" />
 
-                        <Border Width="0" Margin="8,0" />
+                            <controls:StateToggleButton Width="90" State="{Binding State}" />
 
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="15"
-                            Foreground="WhiteSmoke"
-                            Text="{Binding Summary}" />
-                    </StackPanel>
+                            <Border Width="0" Margin="8,0" />
+
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="15"
+                                Foreground="WhiteSmoke"
+                                Text="{Binding Summary}" />
+
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Margin="5,0"
+                            VerticalAlignment="Bottom"
+                            Orientation="Horizontal">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="14" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                    <Setter Property="FontWeight" Value="Regular" />
+                                </Style>
+                            </StackPanel.Resources>
+
+                            <TextBlock Text="{Binding IdReadable}" />
+
+                            <TextBlock
+                                Margin="8,0"
+                                Foreground="DarkGray"
+                                Text="/" />
+
+                            <TextBlock Foreground="LightGray" Text="{Binding ActualDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+
+                            <TextBlock
+                                Margin="8,0"
+                                Foreground="DarkGray"
+                                Text="/" />
+
+                            <TextBlock Text="{Binding EstimatedDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -94,10 +132,10 @@
                             Style="{StaticResource MaterialDesignActionToggleButton}"
                             ToolTip="詳細フィールドを展開">
                             <ToggleButton.Content>
-                                <materialDesign:PackIcon Kind="ChevronDown" />
+                                <materialDesign:PackIcon Kind="ChevronUp" />
                             </ToggleButton.Content>
                             <materialDesign:ToggleButtonAssist.OnContent>
-                                <materialDesign:PackIcon Kind="ChevronUp" />
+                                <materialDesign:PackIcon Kind="ChevronDown" />
                             </materialDesign:ToggleButtonAssist.OnContent>
                         </ToggleButton>
 
@@ -111,6 +149,17 @@
 
                     <!-- 2行目以降: トグルON時のみ表示されるUI -->
                     <StackPanel Margin="0,12,0,0" Visibility="{Binding IsChecked, ElementName=ExpandDetailToggle, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel.Resources>
+                            <Style TargetType="materialDesign:NumericUpDown">
+                                <Setter Property="Foreground" Value="GhostWhite" />
+                                <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                            </Style>
+
+                            <Style TargetType="TextBox">
+                                <Setter Property="Foreground" Value="GhostWhite" />
+                                <Setter Property="FontSize" Value="{StaticResource CommonFontSize}" />
+                            </Style>
+                        </StackPanel.Resources>
                         <Separator Margin="0,0,0,8" Background="{StaticResource LightBackgroundBrush}" />
 
                         <!-- 説明文 -->
@@ -125,22 +174,72 @@
 
                         <!-- プロパティ群（ステータス、優先度、担当者、期日など） -->
                         <WrapPanel Margin="0,8,0,0">
-                            <ComboBox
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="タイプ" />
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="Type" />
+                                </Border>
+                                <ComboBox
+                                    Width="150"
+                                    Height="35"
+                                    Margin="8,0" />
+                            </StackPanel>
 
-                            <materialDesign:NumericUpDown
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="Rate"
-                                Value="{Binding PendingIssue.Rate}" />
+                            <StackPanel Margin="30,0" Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Margin="0,0,10,0"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="Rate" />
+                                </Border>
 
-                            <materialDesign:NumericUpDown
-                                Width="120"
-                                Margin="0,0,8,0"
-                                materialDesign:HintAssist.Hint="Entry No"
-                                Value="{Binding PendingIssue.EntryNo}" />
+                                <materialDesign:NumericUpDown
+                                    Width="120"
+                                    Margin="0,0,8,0"
+                                    materialDesign:HintAssist.Hint="Rate"
+                                    Value="{Binding PendingIssue.Rate}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border
+                                    Height="35"
+                                    Margin="0,0,10,0"
+                                    Padding="10,0"
+                                    VerticalAlignment="Center"
+                                    BorderBrush="LightGray"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="15"
+                                        FontWeight="Medium"
+                                        Text="No. " />
+                                </Border>
+
+                                <materialDesign:NumericUpDown
+                                    Width="120"
+                                    Margin="0,0,8,0"
+                                    materialDesign:HintAssist.Hint="Entry No"
+                                    Value="{Binding PendingIssue.EntryNo}" />
+                            </StackPanel>
+
 
                         </WrapPanel>
                     </StackPanel>
