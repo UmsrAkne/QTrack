@@ -28,9 +28,11 @@ public partial class App
         #if RELEASE
         containerRegistry.Register<IProjectService, ProjectService>();
         containerRegistry.Register<IIssueService, IssueService>();
+        containerRegistry.Register<IYouTrackCommandService, YouTrackCommandService>();
         #elif DEBUG
         containerRegistry.Register<IProjectService, MockProjectService>();
         containerRegistry.Register<IIssueService, MockIssueService>();
+        containerRegistry.Register<IYouTrackCommandService, MockYouTrackCommandService>();
         #endif
 
         containerRegistry.RegisterSingleton<ProjectsViewModel>();

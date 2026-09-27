@@ -9,6 +9,7 @@ namespace QTrack.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
+        private readonly IYouTrackCommandService youTrackCommandService;
         private readonly Func<IssuesViewModel> issuesVmFactory;
         private string title = "QTrack";
         private ITabViewModels? selectedTab;
@@ -17,15 +18,25 @@ namespace QTrack.ViewModels
         {
             AppLogger.Info("MainWindowViewModel created");
             issuesVmFactory = () => new IssuesViewModel(new MockIssueService());
+            youTrackCommandService = new MockYouTrackCommandService();
         }
 
-        public MainWindowViewModel(ProjectsViewModel projectsVm, Func<IssuesViewModel> issuesVmFactory, AppSettings appSettings)
+        public MainWindowViewModel(
+            ProjectsViewModel projectsVm,
+            Func<IssuesViewModel> issuesVmFactory,
+            AppSettings appSettings,
+            IYouTrackCommandService youTrackCommandService)
         {
             AppLogger.Info("MainWindowViewModel created");
 
             // 引数に欠けがあった場合はまともに動かないため、例外をスローして落とす
             ArgumentNullException.ThrowIfNull(projectsVm);
             ArgumentNullException.ThrowIfNull(issuesVmFactory);
+
+            ArgumentNullException.ThrowIfNull(appSettings);
+            ArgumentNullException.ThrowIfNull(youTrackCommandService);
+
+            this.youTrackCommandService = youTrackCommandService;
 
             AppLogger.Info(projectsVm.ToString() ?? string.Empty);
             this.issuesVmFactory = issuesVmFactory;
