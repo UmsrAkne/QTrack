@@ -2,6 +2,7 @@
     x:Class="QTrack.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:QTrack.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -24,6 +25,31 @@
         </DataTemplate>
     </Window.Resources>
 
+    <mah:MetroWindow.InputBindings>
+        <KeyBinding
+            Key="K"
+            Command="{Binding TogglePaletteCommand}"
+            Modifiers="Ctrl" />
+        <KeyBinding
+            Key="J"
+            Command="{Binding TogglePaletteCommand}"
+            Modifiers="Ctrl+Alt" />
+    </mah:MetroWindow.InputBindings>
+
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl>
+            <mah:Flyout
+                CloseButtonVisibility="Collapsed"
+                Header="YouTrack Command"
+                IsOpen="{Binding CommandPaletteViewModel.IsOpen}"
+                Position="Top"
+                Theme="Inverse">
+
+                <!-- 子Viewを配置し、DataContextに子ViewModelをバインド -->
+                <controls:CommandPaletteView DataContext="{Binding CommandPaletteService}" />
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
 
     <TabControl
         Background="{StaticResource DarkBackgroundBrush}"

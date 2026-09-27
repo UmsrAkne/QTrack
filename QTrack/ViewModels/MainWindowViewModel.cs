@@ -9,7 +9,6 @@ namespace QTrack.ViewModels
     // ReSharper disable once ClassNeverInstantiated.Global
     public class MainWindowViewModel : BindableBase
     {
-        private readonly IYouTrackCommandService youTrackCommandService;
         private readonly Func<IssuesViewModel> issuesVmFactory;
         private string title = "QTrack";
         private ITabViewModels? selectedTab;
@@ -18,14 +17,13 @@ namespace QTrack.ViewModels
         {
             AppLogger.Info("MainWindowViewModel created");
             issuesVmFactory = () => new IssuesViewModel(new MockIssueService());
-            youTrackCommandService = new MockYouTrackCommandService();
         }
 
         public MainWindowViewModel(
             ProjectsViewModel projectsVm,
             Func<IssuesViewModel> issuesVmFactory,
             AppSettings appSettings,
-            IYouTrackCommandService youTrackCommandService)
+            CommandPaletteViewModel commandPaletteVm)
         {
             AppLogger.Info("MainWindowViewModel created");
 
@@ -34,9 +32,9 @@ namespace QTrack.ViewModels
             ArgumentNullException.ThrowIfNull(issuesVmFactory);
 
             ArgumentNullException.ThrowIfNull(appSettings);
-            ArgumentNullException.ThrowIfNull(youTrackCommandService);
+            ArgumentNullException.ThrowIfNull(commandPaletteVm);
 
-            this.youTrackCommandService = youTrackCommandService;
+            CommandPaletteViewModel = commandPaletteVm;
 
             AppLogger.Info(projectsVm.ToString() ?? string.Empty);
             this.issuesVmFactory = issuesVmFactory;
@@ -55,6 +53,10 @@ namespace QTrack.ViewModels
         public ObservableCollection<ITabViewModels> TabViewModels { get; set; } = new ();
 
         public ITabViewModels? SelectedTab { get => selectedTab; set => SetProperty(ref selectedTab, value); }
+
+        public CommandPaletteViewModel CommandPaletteViewModel { get; set; }
+
+        public DelegateCommand TogglePaletteCommand => new (OnToggleCommandPalette);
 
         private async void OnOpenProjectEvent(object? sender, Project project)
         {
@@ -98,6 +100,19 @@ namespace QTrack.ViewModels
             // 4. タブ一覧に追加して選択状態にする
             TabViewModels.Add(newIssuesVm);
             SelectedTab = newIssuesVm;
+        }
+
+        private void OnToggleCommandPalette()
+        {
+            if (CommandPaletteViewModel.IsOpen)
+            {
+                CommandPaletteViewModel.IsOpen = false;
+            }
+            else
+            {
+                // 選択中のタブや選択課題の情報を渡して開く
+                CommandPaletteViewModel.Open(contextDescription: SelectedTab?.Header);
+            }
         }
 
         #if DEBUG

@@ -1,0 +1,55 @@
+﻿<UserControl
+    x:Class="QTrack.Views.Controls.CommandPaletteView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:QTrack.ViewModels"
+    d:DataContext="{d:DesignInstance viewModels:CommandPaletteViewModel}"
+    mc:Ignorable="d">
+
+    <Grid Margin="20,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- コンテキスト表示（任意） -->
+        <TextBlock
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,6"
+            FontSize="12"
+            Opacity="0.7"
+            Text="{Binding TargetContextDescription}" />
+
+        <!-- コマンド入力テキストボックス -->
+        <TextBox
+            x:Name="CommandTextBox"
+            Grid.Row="1"
+            Grid.Column="0"
+            mah:TextBoxHelper.ClearTextButton="True"
+            mah:TextBoxHelper.Watermark="例: for me Fixed in Build 1.0 (Enterで実行 / Escで閉じる)"
+            FontSize="16"
+            Text="{Binding CommandText, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox.InputBindings>
+                <KeyBinding Key="Return" Command="{Binding ExecuteCommand}" />
+                <KeyBinding Key="Esc" Command="{Binding CloseCommand}" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            Padding="16,4"
+            Command="{Binding ExecuteCommand}"
+            Content="実行"
+            Style="{StaticResource MahApps.Styles.Button.Square.Accent}" />
+    </Grid>
+</UserControl>
