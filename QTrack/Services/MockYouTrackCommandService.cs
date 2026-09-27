@@ -10,10 +10,11 @@ namespace QTrack.Services
             AppLogger.Info(" - HashCode: " + GetHashCode());
         }
 
-        public void ExecuteCommand(string command)
+        public Task ExecuteCommandAsync(string command)
         {
-            AppLogger.Info("MockYouTrackCommandService.ExecuteCommand");
+            AppLogger.Info("MockYouTrackCommandService.ExecuteCommandAsync");
             AppLogger.Info(" - Command: " + command);
+            return Task.CompletedTask;
         }
     }
 }

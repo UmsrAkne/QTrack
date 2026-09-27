@@ -10,7 +10,7 @@ namespace QTrack.Services
             AppLogger.Info(" - HashCode: " + GetHashCode());
         }
 
-        public void ExecuteCommand(string command)
+        public Task ExecuteCommandAsync(string command)
         {
             throw new NotImplementedException();
         }

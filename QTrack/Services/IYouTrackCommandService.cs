@@ -2,6 +2,6 @@
 {
     public interface IYouTrackCommandService
     {
-        public void ExecuteCommand(string command);
+        public Task ExecuteCommandAsync(string command);
     }
 }
