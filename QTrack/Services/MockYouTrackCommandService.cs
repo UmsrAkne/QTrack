@@ -12,7 +12,8 @@ namespace QTrack.Services
 
         public void ExecuteCommand(string command)
         {
-            throw new NotImplementedException();
+            AppLogger.Info("MockYouTrackCommandService.ExecuteCommand");
+            AppLogger.Info(" - Command: " + command);
         }
     }
 }
