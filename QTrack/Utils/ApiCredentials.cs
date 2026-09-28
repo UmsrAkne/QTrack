@@ -7,5 +7,7 @@
         public string YoutrackProjectsEndpoint { get; set; } = string.Empty;
 
         public string YoutrackIssuesEndpoint { get; set; } = string.Empty;
+
+        public string YoutrackCommandsEndpoint { get; set; } = string.Empty;
     }
 }

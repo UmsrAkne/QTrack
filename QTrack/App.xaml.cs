@@ -21,6 +21,7 @@ public partial class App
             YoutrackApiKey = Env.GetString("YOUTRACK_API_KEY"),
             YoutrackProjectsEndpoint = Env.GetString("YOUTRACK_PROJECTS_ENDPOINT"),
             YoutrackIssuesEndpoint = Env.GetString("YOUTRACK_ISSUES_ENDPOINT"),
+            YoutrackCommandsEndpoint = Env.GetString("YOUTRACK_COMMANDS_ENDPOINT"),
         };
 
         containerRegistry.RegisterInstance(credentials);
