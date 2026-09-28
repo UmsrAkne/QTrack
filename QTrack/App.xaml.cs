@@ -21,6 +21,7 @@ public partial class App
             YoutrackApiKey = Env.GetString("YOUTRACK_API_KEY"),
             YoutrackProjectsEndpoint = Env.GetString("YOUTRACK_PROJECTS_ENDPOINT"),
             YoutrackIssuesEndpoint = Env.GetString("YOUTRACK_ISSUES_ENDPOINT"),
+            YoutrackCommandsEndpoint = Env.GetString("YOUTRACK_COMMANDS_ENDPOINT"),
         };
 
         containerRegistry.RegisterInstance(credentials);
@@ -28,9 +29,11 @@ public partial class App
         #if RELEASE
         containerRegistry.Register<IProjectService, ProjectService>();
         containerRegistry.Register<IIssueService, IssueService>();
+        containerRegistry.Register<IYouTrackCommandService, YouTrackCommandService>();
         #elif DEBUG
         containerRegistry.Register<IProjectService, MockProjectService>();
         containerRegistry.Register<IIssueService, MockIssueService>();
+        containerRegistry.Register<IYouTrackCommandService, MockYouTrackCommandService>();
         #endif
 
         containerRegistry.RegisterSingleton<ProjectsViewModel>();

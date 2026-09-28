@@ -19,13 +19,22 @@ namespace QTrack.ViewModels
             issuesVmFactory = () => new IssuesViewModel(new MockIssueService());
         }
 
-        public MainWindowViewModel(ProjectsViewModel projectsVm, Func<IssuesViewModel> issuesVmFactory, AppSettings appSettings)
+        public MainWindowViewModel(
+            ProjectsViewModel projectsVm,
+            Func<IssuesViewModel> issuesVmFactory,
+            AppSettings appSettings,
+            CommandPaletteViewModel commandPaletteVm)
         {
             AppLogger.Info("MainWindowViewModel created");
 
             // 引数に欠けがあった場合はまともに動かないため、例外をスローして落とす
             ArgumentNullException.ThrowIfNull(projectsVm);
             ArgumentNullException.ThrowIfNull(issuesVmFactory);
+
+            ArgumentNullException.ThrowIfNull(appSettings);
+            ArgumentNullException.ThrowIfNull(commandPaletteVm);
+
+            CommandPaletteViewModel = commandPaletteVm;
 
             AppLogger.Info(projectsVm.ToString() ?? string.Empty);
             this.issuesVmFactory = issuesVmFactory;
@@ -44,6 +53,10 @@ namespace QTrack.ViewModels
         public ObservableCollection<ITabViewModels> TabViewModels { get; set; } = new ();
 
         public ITabViewModels? SelectedTab { get => selectedTab; set => SetProperty(ref selectedTab, value); }
+
+        public CommandPaletteViewModel CommandPaletteViewModel { get; set; }
+
+        public DelegateCommand TogglePaletteCommand => new (OnToggleCommandPalette);
 
         private async void OnOpenProjectEvent(object? sender, Project project)
         {
@@ -87,6 +100,19 @@ namespace QTrack.ViewModels
             // 4. タブ一覧に追加して選択状態にする
             TabViewModels.Add(newIssuesVm);
             SelectedTab = newIssuesVm;
+        }
+
+        private void OnToggleCommandPalette()
+        {
+            if (CommandPaletteViewModel.IsOpen)
+            {
+                CommandPaletteViewModel.IsOpen = false;
+            }
+            else
+            {
+                // 選択中のタブや選択課題の情報を渡して開く
+                CommandPaletteViewModel.Open(contextDescription: SelectedTab?.Header);
+            }
         }
 
         #if DEBUG
