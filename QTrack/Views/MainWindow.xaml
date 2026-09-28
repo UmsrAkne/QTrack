@@ -46,7 +46,7 @@
                 Theme="Inverse">
 
                 <!-- 子Viewを配置し、DataContextに子ViewModelをバインド -->
-                <controls:CommandPaletteView DataContext="{Binding CommandPaletteService}" />
+                <controls:CommandPaletteView DataContext="{Binding CommandPaletteViewModel}" />
             </mah:Flyout>
         </mah:FlyoutsControl>
     </mah:MetroWindow.Flyouts>

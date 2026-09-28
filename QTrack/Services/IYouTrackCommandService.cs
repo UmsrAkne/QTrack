@@ -2,6 +2,8 @@
 {
     public interface IYouTrackCommandService
     {
-        public Task ExecuteCommandAsync(string command);
+        public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken = default);
+
+        public Task ExecuteCommandAsync(IEnumerable<string> issueIds, string command, CancellationToken cancellationToken = default);
     }
 }

@@ -52,7 +52,7 @@ namespace QTrack.ViewModels
             CommandText = string.Empty;
             IsOpen = false; // 実行時に閉じる
 
-            // await youTrackCommandService.ExecuteAsync(text);
+            await youTrackCommandService.ExecuteCommandAsync(text);
         }
     }
 }

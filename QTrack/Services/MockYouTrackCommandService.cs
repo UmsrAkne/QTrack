@@ -10,11 +10,16 @@ namespace QTrack.Services
             AppLogger.Info(" - HashCode: " + GetHashCode());
         }
 
-        public Task ExecuteCommandAsync(string command)
+        public Task ExecuteCommandAsync(string command, CancellationToken cancellationToken = default)
         {
             AppLogger.Info("MockYouTrackCommandService.ExecuteCommandAsync");
             AppLogger.Info(" - Command: " + command);
             return Task.CompletedTask;
+        }
+
+        public Task ExecuteCommandAsync(IEnumerable<string> issueIds, string command, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }
