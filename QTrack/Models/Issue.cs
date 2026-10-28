@@ -26,7 +26,15 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
-        public IssueState? State { get => state; set => SetProperty(ref state, value); }
+        public IssueState? State
+        {
+            get => state;
+            set
+            {
+                SetProperty(ref state, value);
+                RaisePropertyChanged(nameof(IsInProgress));
+            }
+        }
 
         public string? Assignee { get; init; }
 
@@ -47,6 +55,8 @@
             get => actualDuration;
             set => SetProperty(ref actualDuration, value);
         }
+
+        public bool IsInProgress => State == IssueState.InProgress;
 
         public string GetProjectShortName()
         {
