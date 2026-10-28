@@ -15,12 +15,17 @@ namespace QTrack.Services
                 throw new HttpRequestException("プロジェクトの取得に失敗しました。(Status: 500 Internal Server Error)");
             }
 
+            if (string.IsNullOrWhiteSpace(project.ShortName))
+            {
+                project.ShortName = "DUMMY_PROJ";
+            }
+
             var l = new List<Issue>();
             for (var i = 0; i < 10; i++)
             {
                 var issue = new Issue()
                 {
-                    IdReadable = $"{project}-00{i + 1}",
+                    IdReadable = $"{project.ShortName}-00{i + 1}",
                     Id = $"000-0{i + 1}",
                     Summary = $"テスト用ダミー課題のタイトル {i + 1} ",
                     Description = $"テスト用課題の説明文\n改行つき {i + 1}",
