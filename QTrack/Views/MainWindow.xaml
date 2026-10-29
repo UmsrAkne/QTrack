@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:QTrack.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:QTrack.ViewModels"
     xmlns:views="clr-namespace:QTrack.Views"
@@ -58,12 +59,146 @@
         SelectedItem="{Binding SelectedTab}"
         Style="{x:Null}">
 
+        <TabControl.ItemContainerStyle>
+            <Style TargetType="TabItem">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border
+                                x:Name="headerBorder"
+                                Margin="2,1"
+                                Padding="4,2"
+                                Background="#303030"
+                                CornerRadius="4,4,0,0">
+                                <!-- ItemTemplate の中身（テキスト等）が表示される場所 -->
+                                <ContentPresenter
+                                    x:Name="contentPresenter"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    ContentSource="Header"
+                                    RecognizesAccessKey="True" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <!-- 選択時の背景色と文字色 -->
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="headerBorder" Property="Background" Value="RoyalBlue" />
+                                    <Setter Property="TextElement.Foreground" Value="WhiteSmoke" />
+                                </Trigger>
+                                <!-- 非選択時の文字色 -->
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter Property="TextElement.Foreground" Value="#777777" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </TabControl.ItemContainerStyle>
+
         <TabControl.ItemTemplate>
             <DataTemplate DataType="{x:Type viewModels:ITabViewModels}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontSize="{StaticResource CommonFontSize}" Text="{Binding Header}" />
-                </StackPanel>
+                <Border
+                    x:Name="headerBorder"
+                    Padding="4,0"
+                    BorderThickness="0"
+                    CornerRadius="6,6,0,0">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <!-- 非選択時の背景色 -->
+                            <Setter Property="Background" Value="Transparent" />
+                            <Style.Triggers>
+                                <!-- 選択時の背景色 -->
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="True">
+                                    <Setter Property="Background" Value="RoyalBlue" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="15"
+                            Text="{Binding Header}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <!-- 非選択時の文字色 -->
+                                    <Setter Property="Foreground" Value="#777777" />
+                                    <Style.Triggers>
+                                        <!-- 選択時の文字色 -->
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=IsSelected}" Value="True">
+                                            <Setter Property="Foreground" Value="WhiteSmoke" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- 各タブの x ボタン -->
+                        <Button
+                            Margin="6,0,0,0"
+                            Background="Transparent"
+                            BorderThickness="0">
+                            <Button.Content>
+                                <materialDesign:PackIcon
+                                    Width="14"
+                                    Height="14"
+                                    Kind="Close" />
+                            </Button.Content>
+                            <Button.Template>
+
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border
+                                        x:Name="RootBorder"
+                                        Padding="{TemplateBinding Padding}"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="4"
+                                        SnapsToDevicePixels="True">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <!-- Hover -->
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Trigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation
+                                                            Storyboard.TargetName="RootBorder"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#44FFFFFF"
+                                                            Duration="0:0:0.15" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.EnterActions>
+                                            <Trigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <ColorAnimation
+                                                            Storyboard.TargetName="RootBorder"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="Transparent"
+                                                            Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </Trigger.ExitActions>
+                                        </Trigger>
+
+                                        <!-- Disabled (必要に応じて) -->
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.5" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </Border>
             </DataTemplate>
         </TabControl.ItemTemplate>
+
     </TabControl>
 </mah:MetroWindow>
