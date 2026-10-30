@@ -144,5 +144,10 @@ namespace QTrack.Services
             issue.IsCompleted = true;
             issue.State = IssueState.Completed;
         }
+
+        public Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

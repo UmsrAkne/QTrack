@@ -51,6 +51,11 @@ namespace QTrack.Tests.Services
             {
                 throw new NotImplementedException();
             }
+
+            public Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [Test]

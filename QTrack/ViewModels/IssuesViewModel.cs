@@ -120,6 +120,7 @@ namespace QTrack.ViewModels
                 }
 
                 await issueService.CompleteIssueAsync(issue);
+                await issueService.AddWorkDurationAsync(issue, TimeSpan.FromMinutes(10));
             });
 
         public async Task InitializeAsync(Project project)
