@@ -62,6 +62,13 @@ namespace QTrack.Services.DTOs
                 issue.Rate = rateResult;
             }
 
+            var rawWorkStartedAt = GetCustomFieldValue("WorkStartedAt");
+
+            if (long.TryParse(rawWorkStartedAt, out var workStartedAtUnixTime))
+            {
+                issue.WorkStartedAt = DateTimeOffset.FromUnixTimeMilliseconds(workStartedAtUnixTime).LocalDateTime;
+            }
+
             return issue;
         }
 

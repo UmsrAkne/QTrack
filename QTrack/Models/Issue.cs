@@ -26,6 +26,8 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
+        public DateTime? WorkStartedAt { get; set; }
+
         public IssueState? State
         {
             get => state;
