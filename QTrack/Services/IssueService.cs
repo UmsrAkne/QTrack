@@ -130,6 +130,12 @@ namespace QTrack.Services
                             ["$type"] = "StateBundleElement",
                         },
                     },
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "WorkStartedAt",
+                        ["$type"] = "SimpleIssueCustomField",
+                        ["value"] = null!,
+                    },
                 },
             };
 
