@@ -150,9 +150,41 @@ namespace QTrack.Services
             throw new NotImplementedException();
         }
 
-        public Task StartIssueAsync(Issue issue)
+        public async Task StartIssueAsync(Issue issue)
         {
-            throw new NotImplementedException();
+            var currentUnixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}?fields=customFields(name,value(name))";
+            var payload = new Dictionary<string, object>
+            {
+                ["customFields"] = new[]
+                {
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "State",
+                        ["$type"] = "StateIssueCustomField",
+                        ["value"] = new Dictionary<string, object>
+                        {
+                            ["name"] = "作業中",
+                            ["$type"] = "StateBundleElement",
+                        },
+                    },
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "WorkStartedAt",
+                        ["$type"] = "SimpleIssueCustomField",
+                        ["value"] = currentUnixTimeMilliseconds,
+                    },
+                },
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.YoutrackApiKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Content = JsonContent.Create(payload);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }
