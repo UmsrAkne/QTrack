@@ -93,5 +93,11 @@ namespace QTrack.Services
             issue.ActualDuration += duration;
             return Task.CompletedTask;
         }
+
+        public Task StartIssueAsync(Issue issue)
+        {
+            issue.WorkStartedAt = DateTime.Now;
+            return Task.CompletedTask;
+        }
     }
 }

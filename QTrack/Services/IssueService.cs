@@ -149,5 +149,10 @@ namespace QTrack.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task StartIssueAsync(Issue issue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

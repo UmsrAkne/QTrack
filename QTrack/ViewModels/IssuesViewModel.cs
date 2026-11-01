@@ -15,6 +15,7 @@ namespace QTrack.ViewModels
         private AsyncRelayCommand? addIssueCommand;
         private AsyncRelayCommand<Issue>? toggleCompleteFlagCommand;
         private IssueListItemViewModel? selectedIssue;
+        private AsyncRelayCommand<Issue>? startIssueCommand;
 
         public IssuesViewModel()
         {
@@ -121,6 +122,20 @@ namespace QTrack.ViewModels
 
                 await issueService.CompleteIssueAsync(issue);
                 await issueService.AddWorkDurationAsync(issue, TimeSpan.FromMinutes(10));
+            });
+
+        public AsyncRelayCommand<Issue> StartIssueAsyncCommand =>
+            startIssueCommand ??= new AsyncRelayCommand<Issue>(async (issue) =>
+            {
+                if (issue == null)
+                {
+                    return;
+                }
+
+                if (issue.State == IssueState.InProgress)
+                {
+                    await issueService.StartIssueAsync(issue);
+                }
             });
 
         public async Task InitializeAsync(Project project)

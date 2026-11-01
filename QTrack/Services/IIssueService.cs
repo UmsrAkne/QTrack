@@ -15,5 +15,7 @@ namespace QTrack.Services
         Task CompleteIssueAsync(Issue issue);
 
         Task AddWorkDurationAsync(Issue issue, TimeSpan duration);
+
+        Task StartIssueAsync(Issue issue);
     }
 }
