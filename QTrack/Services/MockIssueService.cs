@@ -80,5 +80,24 @@ namespace QTrack.Services
             issue.State = issue.IsCompleted ? IssueState.Completed : IssueState.Pausing;
             return Task.CompletedTask;
         }
+
+        public Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
+        {
+            if (duration == TimeSpan.Zero)
+            {
+                var dur = DateTime.Now - issue.WorkStatedAt;
+                issue.ActualDuration += dur;
+                return Task.CompletedTask;
+            }
+
+            issue.ActualDuration += duration;
+            return Task.CompletedTask;
+        }
+
+        public Task StartIssueAsync(Issue issue)
+        {
+            issue.WorkStartedAt = DateTime.Now;
+            return Task.CompletedTask;
+        }
     }
 }

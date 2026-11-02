@@ -18,7 +18,11 @@
         </Style>
     </UserControl.Resources>
 
-    <Button Click="OnButtonClick">
+    <Button
+        Click="OnButtonClick"
+        Command="{Binding Command, ElementName=Root}"
+        CommandParameter="{Binding CommandParameter, ElementName=Root}">
+
         <Button.Effect>
             <DropShadowEffect
                 BlurRadius="3"

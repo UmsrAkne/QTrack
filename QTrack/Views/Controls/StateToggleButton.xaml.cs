@@ -16,6 +16,12 @@ namespace QTrack.Views.Controls
         public readonly static DependencyProperty CommandProperty =
             DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(StateToggleButton));
 
+        public readonly static DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register(
+                nameof(CommandParameter),
+                typeof(object),
+                typeof(StateToggleButton));
+
         public StateToggleButton()
         {
             InitializeComponent();
@@ -31,6 +37,12 @@ namespace QTrack.Views.Controls
         {
             get => (ICommand)GetValue(CommandProperty);
             set => SetValue(CommandProperty, value);
+        }
+
+        public object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         private void OnButtonClick(object sender, RoutedEventArgs e)

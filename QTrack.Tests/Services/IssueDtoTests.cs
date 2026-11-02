@@ -149,6 +149,11 @@ namespace QTrack.Tests.Services
                     "value": 100,
                     "name": "Rate",
                     "$type": "SimpleIssueCustomField"
+                },
+                {
+                    "value": 1793538000000,
+                    "name": "WorkStartedAt",
+                    "$type": "SimpleIssueCustomField"
                 }
             ],
             "updated": 1788688535945,
@@ -267,6 +272,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.EntryNo, Is.EqualTo(999));
             Assert.That(issue.Rate, Is.EqualTo(100));
             Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
+            Assert.That(issue.WorkStartedAt, Is.Not.Null.And.Not.EqualTo(default(DateTimeOffset)));
         }
 
         [Test]

@@ -130,6 +130,12 @@ namespace QTrack.Services
                             ["$type"] = "StateBundleElement",
                         },
                     },
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "WorkStartedAt",
+                        ["$type"] = "SimpleIssueCustomField",
+                        ["value"] = null!,
+                    },
                 },
             };
 
@@ -143,6 +149,72 @@ namespace QTrack.Services
 
             issue.IsCompleted = true;
             issue.State = IssueState.Completed;
+        }
+
+        public async Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
+        {
+            if (duration.TotalMinutes < 1)
+            {
+                return;
+            }
+
+            var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}/timeTracking/workItems";
+
+            var payload = new Dictionary<string, object>
+            {
+                ["duration"] = new Dictionary<string, object>
+                {
+                    ["minutes"] = (int)duration.TotalMinutes,
+                    ["text"] = "作業",
+                },
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.YoutrackApiKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Content = JsonContent.Create(payload);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task StartIssueAsync(Issue issue)
+        {
+            var now = DateTimeOffset.UtcNow;
+            var currentUnixTimeMilliseconds = now.ToUnixTimeMilliseconds();
+            issue.Start(now);
+
+            var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}?fields=customFields(name,value(name))";
+            var payload = new Dictionary<string, object>
+            {
+                ["customFields"] = new[]
+                {
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "State",
+                        ["$type"] = "StateIssueCustomField",
+                        ["value"] = new Dictionary<string, object>
+                        {
+                            ["name"] = "作業中",
+                            ["$type"] = "StateBundleElement",
+                        },
+                    },
+                    new Dictionary<string, object>
+                    {
+                        ["name"] = "WorkStartedAt",
+                        ["$type"] = "SimpleIssueCustomField",
+                        ["value"] = currentUnixTimeMilliseconds,
+                    },
+                },
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.YoutrackApiKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Content = JsonContent.Create(payload);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

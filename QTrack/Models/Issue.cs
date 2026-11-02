@@ -26,6 +26,8 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
+        public DateTimeOffset? WorkStartedAt { get; set; }
+
         public IssueState? State
         {
             get => state;
@@ -58,6 +60,8 @@
 
         public bool IsInProgress => State == IssueState.InProgress;
 
+        public DateTime WorkStatedAt { get; set; }
+
         public string GetProjectShortName()
         {
             if (string.IsNullOrWhiteSpace(IdReadable) || !IdReadable.Contains('-'))
@@ -66,6 +70,20 @@
             }
 
             return IdReadable[..IdReadable.LastIndexOf('-')];
+        }
+
+        public void Start(DateTimeOffset? workStartedAt = null)
+        {
+            State = IssueState.InProgress;
+
+            if (workStartedAt != null)
+            {
+                WorkStartedAt = workStartedAt;
+            }
+            else
+            {
+                WorkStartedAt = DateTimeOffset.UtcNow;
+            }
         }
     }
 }
