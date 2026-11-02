@@ -121,7 +121,14 @@ namespace QTrack.ViewModels
                 }
 
                 await issueService.CompleteIssueAsync(issue);
-                await issueService.AddWorkDurationAsync(issue, TimeSpan.FromMinutes(10));
+
+                var duration = TimeSpan.Zero;
+                if (issue.WorkStartedAt != null)
+                {
+                    duration = DateTime.Now - issue.WorkStartedAt.Value;
+                }
+
+                await issueService.AddWorkDurationAsync(issue, duration);
             });
 
         public AsyncRelayCommand<Issue> StartIssueAsyncCommand =>

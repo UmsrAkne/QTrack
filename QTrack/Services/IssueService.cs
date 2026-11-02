@@ -151,9 +151,31 @@ namespace QTrack.Services
             issue.State = IssueState.Completed;
         }
 
-        public Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
+        public async Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
         {
-            throw new NotImplementedException();
+            if (duration.TotalMinutes < 1)
+            {
+                return;
+            }
+
+            var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}/timeTracking/workItems";
+
+            var payload = new Dictionary<string, object>
+            {
+                ["duration"] = new Dictionary<string, object>
+                {
+                    ["minutes"] = (int)duration.TotalMinutes,
+                    ["text"] = "作業",
+                },
+            };
+
+            using var request = new HttpRequestMessage(HttpMethod.Post, url);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", credentials.YoutrackApiKey);
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Content = JsonContent.Create(payload);
+
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task StartIssueAsync(Issue issue)
