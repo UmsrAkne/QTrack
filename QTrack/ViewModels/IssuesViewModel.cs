@@ -120,12 +120,13 @@ namespace QTrack.ViewModels
                     return;
                 }
 
+                var workStartedAt = issue.WorkStartedAt;
                 await issueService.CompleteIssueAsync(issue);
 
                 var duration = TimeSpan.Zero;
-                if (issue.WorkStartedAt != null)
+                if (workStartedAt != null)
                 {
-                    duration = DateTime.Now - issue.WorkStartedAt.Value;
+                    duration = DateTimeOffset.UtcNow - workStartedAt.Value;
                 }
 
                 await issueService.AddWorkDurationAsync(issue, duration);

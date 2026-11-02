@@ -26,7 +26,7 @@
 
         public string? Type { get => type; set => SetProperty(ref type, value); }
 
-        public DateTime? WorkStartedAt { get; set; }
+        public DateTimeOffset? WorkStartedAt { get; set; }
 
         public IssueState? State
         {
@@ -70,6 +70,20 @@
             }
 
             return IdReadable[..IdReadable.LastIndexOf('-')];
+        }
+
+        public void Start(DateTimeOffset? workStartedAt = null)
+        {
+            State = IssueState.InProgress;
+
+            if (workStartedAt != null)
+            {
+                WorkStartedAt = workStartedAt;
+            }
+            else
+            {
+                WorkStartedAt = DateTimeOffset.UtcNow;
+            }
         }
     }
 }

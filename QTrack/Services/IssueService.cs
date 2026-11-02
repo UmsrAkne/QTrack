@@ -180,7 +180,9 @@ namespace QTrack.Services
 
         public async Task StartIssueAsync(Issue issue)
         {
-            var currentUnixTimeMilliseconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var now = DateTimeOffset.UtcNow;
+            var currentUnixTimeMilliseconds = now.ToUnixTimeMilliseconds();
+            issue.Start(now);
 
             var url = $"{credentials.YoutrackIssuesEndpoint}/{issue.IdReadable}?fields=customFields(name,value(name))";
             var payload = new Dictionary<string, object>

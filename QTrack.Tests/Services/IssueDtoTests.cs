@@ -272,7 +272,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.EntryNo, Is.EqualTo(999));
             Assert.That(issue.Rate, Is.EqualTo(100));
             Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
-            Assert.That(issue.WorkStartedAt, Is.Not.Null.And.Not.EqualTo(default(DateTime)));
+            Assert.That(issue.WorkStartedAt, Is.Not.Null.And.Not.EqualTo(default(DateTimeOffset)));
         }
 
         [Test]
