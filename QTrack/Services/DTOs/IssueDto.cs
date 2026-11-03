@@ -69,6 +69,12 @@ namespace QTrack.Services.DTOs
                 issue.WorkStartedAt = DateTimeOffset.FromUnixTimeMilliseconds(workStartedAtUnixTime).LocalDateTime;
             }
 
+            var rawDuration = GetCustomFieldValue("経過時間");
+            if (int.TryParse(rawDuration, out var minutes))
+            {
+                issue.ActualDuration = TimeSpan.FromMinutes(minutes);
+            }
+
             return issue;
         }
 
@@ -124,7 +130,7 @@ namespace QTrack.Services.DTOs
             return val.ValueKind switch
             {
                 // オブジェクトの場合 ({ "name": "Show-stopper", ... }) -> nameプロパティを取得
-                JsonValueKind.Object => val.TryGetProperty("name", out var nameProp) ? nameProp.GetString() : null,
+                JsonValueKind.Object => GetObjectValue(val),
 
                 // 文字列の場合 ("直接の文字列")
                 JsonValueKind.String => val.GetString(),
@@ -135,6 +141,26 @@ namespace QTrack.Services.DTOs
                 // null や その他
                 _ => null,
             };
+        }
+
+        private string? GetObjectValue(JsonElement element)
+        {
+            if (element.TryGetProperty("minutes", out var minutesProp))
+            {
+                return minutesProp.GetRawText();
+            }
+
+            if (element.TryGetProperty("name", out var nameProp))
+            {
+                return nameProp.GetString();
+            }
+
+            if (element.TryGetProperty("presentation", out var presentationProp))
+            {
+                return presentationProp.GetString();
+            }
+
+            return null;
         }
 
         public class IssueLinkDto

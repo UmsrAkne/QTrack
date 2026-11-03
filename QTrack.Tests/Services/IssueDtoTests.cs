@@ -136,10 +136,15 @@ namespace QTrack.Tests.Services
                     "$type": "PeriodIssueCustomField"
                 },
                 {
-                    "value": null,
+                    "value": 
+                    {
+                      "presentation": "8m",
+                      "minutes": 8,
+                      "$type": "PeriodValue"
+                    },
                     "name": "経過時間",
                     "$type": "PeriodIssueCustomField"
-                },
+                },        
                 {
                     "value": 999,
                     "name": "EntryNo",
@@ -273,6 +278,7 @@ namespace QTrack.Tests.Services
             Assert.That(issue.Rate, Is.EqualTo(100));
             Assert.That(issue.UpdatedAt, Is.Not.EqualTo(new DateTime()));
             Assert.That(issue.WorkStartedAt, Is.Not.Null.And.Not.EqualTo(default(DateTimeOffset)));
+            Assert.That(issue.ActualDuration, Is.EqualTo(TimeSpan.FromMinutes(8)));
         }
 
         [Test]
