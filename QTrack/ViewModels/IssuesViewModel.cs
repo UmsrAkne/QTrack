@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using QTrack.Models;
 using QTrack.Services;
@@ -16,6 +17,7 @@ namespace QTrack.ViewModels
         private AsyncRelayCommand<Issue>? toggleCompleteFlagCommand;
         private IssueListItemViewModel? selectedIssue;
         private AsyncRelayCommand<Issue>? startIssueCommand;
+        private readonly ITimerService timerService;
 
         public IssuesViewModel()
         {
@@ -28,12 +30,20 @@ namespace QTrack.ViewModels
             Issues.AddRange(list);
         }
 
-        public IssuesViewModel(IIssueService issueService)
+        public IssuesViewModel(IIssueService issueService, ITimerService timerService)
         {
             AppLogger.Info("IssuesViewModel created");
             AppLogger.Info(issueService.ToString() ?? string.Empty);
 
             this.issueService = issueService;
+
+            this.timerService = timerService;
+            timerService.Tick += (_, args) =>
+            {
+                Console.WriteLine("Tick");
+            };
+
+            timerService.Start(TimeSpan.FromSeconds(1));
         }
 
         public string Header { get; set; } = "Issues";

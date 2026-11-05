@@ -16,7 +16,7 @@ namespace QTrack.ViewModels
         public MainWindowViewModel()
         {
             AppLogger.Info("MainWindowViewModel created");
-            issuesVmFactory = () => new IssuesViewModel(new MockIssueService());
+            issuesVmFactory = () => new IssuesViewModel(new MockIssueService(), new TimerService());
         }
 
         public MainWindowViewModel(

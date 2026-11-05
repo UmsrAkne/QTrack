@@ -38,6 +38,7 @@ public partial class App
 
         containerRegistry.RegisterSingleton<ProjectsViewModel>();
         containerRegistry.Register<IssuesViewModel>();
+        containerRegistry.Register<ITimerService, TimerService>();
 
         var settings = AppSettings.Load();
         settings.Save();
