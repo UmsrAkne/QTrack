@@ -83,10 +83,10 @@ namespace QTrack.Services
 
         public Task AddWorkDurationAsync(Issue issue, TimeSpan duration)
         {
-            if (duration == TimeSpan.Zero)
+            if (duration == TimeSpan.Zero && issue.WorkStartedAt != null)
             {
-                var dur = DateTime.Now - issue.WorkStatedAt;
-                issue.ActualDuration += dur;
+                var dur = DateTime.Now - issue.WorkStartedAt;
+                issue.ActualDuration += dur.Value;
                 return Task.CompletedTask;
             }
 
