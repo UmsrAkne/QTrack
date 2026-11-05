@@ -60,8 +60,6 @@
 
         public bool IsInProgress => State == IssueState.InProgress;
 
-        public DateTime WorkStatedAt { get; set; }
-
         public string GetProjectShortName()
         {
             if (string.IsNullOrWhiteSpace(IdReadable) || !IdReadable.Contains('-'))
