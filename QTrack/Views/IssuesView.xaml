@@ -81,14 +81,14 @@
                                 Foreground="DarkGray"
                                 Text="/" />
 
-                            <TextBlock Foreground="LightGray" Text="{Binding ActualDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+                            <TextBlock Foreground="LightGray" Text="{Binding ActualDuration.TotalMinutes, StringFormat={}{0:F0} m}" />
 
                             <TextBlock
                                 Margin="8,0"
                                 Foreground="DarkGray"
                                 Text="/" />
 
-                            <TextBlock Text="{Binding EstimatedDuration.TotalMinutes, StringFormat={}{0:F0} min}" />
+                            <TextBlock Text="{Binding EstimatedDuration.TotalMinutes, StringFormat={}{0:F0} m}" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
